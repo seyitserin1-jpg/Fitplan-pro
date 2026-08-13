@@ -1,1 +1,32 @@
-<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#173f2a"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FitPlan Pro"><link rel="manifest" href="manifest.json"><link rel="stylesheet" href="style.css"><title>FitPlan Pro Unique</title></head><body><header><div><small>FITPLAN PRO</small><h1>Unique</h1></div><div id="date"></div></header><main id="app"></main><nav><button data-page="home">🏠<span>Bugün</span></button><button data-page="food">🥗<span>Beslenme</span></button><button data-page="plan">⏰<span>Program</span></button><button data-page="profile">👤<span>Profil</span></button></nav><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#102a1c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="FitPlan Pro">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="style.css">
+<title>FitPlan Pro Unique v4</title>
+</head>
+<body>
+<header class="topbar">
+  <div><div class="eyebrow">FITPLAN PRO</div><h1>Unique v4</h1></div>
+  <button class="iconbtn" id="installBtn" hidden>＋</button>
+</header>
+<main id="app"></main>
+<nav class="nav" aria-label="Ana menü">
+ <button data-page="home">🏠<span>Bugün</span></button>
+ <button data-page="plan">🥗<span>Plan</span></button>
+ <button data-page="scan">📷<span>Analiz</span></button>
+ <button data-page="coach">🤖<span>AI Koç</span></button>
+ <button data-page="profile">👤<span>Profil</span></button>
+</nav>
+<div id="toast" class="toast"></div>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

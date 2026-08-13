@@ -279,3 +279,60 @@ body{
 }
 .section-nav button.active{background:var(--brand);color:#fff;border-color:var(--brand)}
 .fade-in{animation:cardIn .4s ease both}
+
+
+/* V5.2 HOTFIX — header/hero overlap */
+.topbar{
+  position:sticky;
+  top:0;
+  z-index:100;
+  min-height:78px;
+}
+.topbar-inner{
+  position:relative;
+  z-index:2;
+}
+.wrap{
+  position:relative;
+  z-index:1;
+  padding-top:18px;
+}
+.hero{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+}
+.hero > *{
+  position:relative;
+  z-index:2;
+}
+.hero .greeting,
+.hero .sub{
+  color:var(--ink);
+  opacity:1;
+}
+.hero .greeting{
+  margin-top:8px;
+}
+@media (max-width:600px){
+  .topbar{
+    min-height:92px;
+  }
+  .topbar-inner{
+    height:64px;
+  }
+  .wrap{
+    padding-top:16px;
+  }
+  .hero{
+    margin-top:0;
+  }
+  .hero .greeting{
+    font-size:25px;
+    line-height:1.12;
+  }
+  .hero .sub{
+    font-size:14px;
+    line-height:1.45;
+  }
+}

@@ -554,3 +554,75 @@ body:before{
   .greeting{font-size:28px}
   .topbar{padding-top:12px}
 }
+
+/* ===== V6.1 FUTURE UI — REAL NEON THEME ===== */
+:root{
+  --bg:#050914;
+  --surface:rgba(12,20,34,.82);
+  --surface-2:rgba(20,31,51,.82);
+  --ink:#edf8ff;
+  --muted:#8fa4b8;
+  --brand:#07101d;
+  --brand-2:#19d3ff;
+  --accent:#7c5cff;
+  --line:rgba(126,183,214,.18);
+  --danger:#ff5c7a;
+  --shadow:0 18px 55px rgba(0,0,0,.35),0 0 30px rgba(25,211,255,.06);
+  --radius:24px;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body{
+  background:
+    radial-gradient(circle at 15% 0%,rgba(25,211,255,.13),transparent 28%),
+    radial-gradient(circle at 90% 12%,rgba(124,92,255,.16),transparent 30%),
+    linear-gradient(180deg,#050914 0%,#07101d 55%,#050914 100%);
+}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;background-image:linear-gradient(rgba(126,183,214,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(126,183,214,.07) 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(to bottom,black,transparent 88%);z-index:0}
+.topbar{background:rgba(5,9,20,.82);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(25,211,255,.16);box-shadow:0 8px 35px rgba(0,0,0,.28);position:sticky;z-index:100}
+.topbar:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,#19d3ff,#7c5cff,transparent);opacity:.8}
+.topbar-inner,.wrap,.nav{position:relative;z-index:2}
+.brand-mark{background:linear-gradient(135deg,#19d3ff,#7c5cff);color:#04101a;box-shadow:0 0 24px rgba(25,211,255,.25);border-radius:14px}
+.eyebrow{color:#19d3ff;opacity:.9;letter-spacing:3px}
+.brand-title{color:#f3fbff}
+.profile-mini{border-color:rgba(25,211,255,.35);background:rgba(25,211,255,.07);box-shadow:inset 0 0 20px rgba(25,211,255,.05),0 0 18px rgba(25,211,255,.08)}
+.card{background:linear-gradient(145deg,rgba(14,25,42,.88),rgba(7,14,26,.86));border:1px solid var(--line);box-shadow:var(--shadow);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.card:before{content:"";display:block;position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(135deg,rgba(25,211,255,.05),transparent 35%,rgba(124,92,255,.04));opacity:.8}
+.card{position:relative;overflow:hidden}
+.card>*{position:relative;z-index:1}
+.hero{background:radial-gradient(circle at 85% 20%,rgba(25,211,255,.13),transparent 28%),linear-gradient(145deg,rgba(12,28,45,.96),rgba(7,14,26,.92))}
+.kicker{color:#6fe7ff}
+.greeting,.title,.target-number,.calorie-number,.metric-value,.ring-value{color:#f3fbff}
+.sub,.tag,.metric-label,.metric-target,.ring-label{color:#8fa4b8}
+.ring{background:conic-gradient(#19d3ff calc(var(--p)*1%),#172638 0);box-shadow:0 0 28px rgba(25,211,255,.14),inset 0 0 20px rgba(124,92,255,.08)}
+.ring:after{background:#08111f;border:1px solid rgba(25,211,255,.15)}
+.metric{background:rgba(12,23,39,.78);border-color:rgba(25,211,255,.14);box-shadow:inset 0 0 22px rgba(25,211,255,.025)}
+.bar{background:#142337;border:1px solid rgba(126,183,214,.12)}
+.fill{background:linear-gradient(90deg,#19d3ff,#7c5cff);box-shadow:0 0 14px rgba(25,211,255,.38)}
+.btn{background:linear-gradient(135deg,#11bde8,#5b4de5);box-shadow:0 8px 24px rgba(25,211,255,.13),inset 0 1px rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.08)}
+.btn.light{background:rgba(18,34,54,.9);color:#dff8ff;border-color:rgba(25,211,255,.16)}
+.btn.ghost{background:transparent;color:#6fe7ff;border-color:rgba(25,211,255,.25)}
+.btn.danger{background:rgba(255,92,122,.12);color:#ff8ea3;border-color:rgba(255,92,122,.25)}
+.input,.select{background:rgba(7,15,28,.9);border-color:rgba(126,183,214,.2);color:#edf8ff}
+.input::placeholder{color:#61778b}
+.input:focus,.select:focus{border-color:#19d3ff;box-shadow:0 0 0 3px rgba(25,211,255,.1),0 0 18px rgba(25,211,255,.08)}
+.quick-actions .btn{min-height:52px}
+.nav{background:rgba(5,9,20,.88);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);border-top:1px solid rgba(25,211,255,.13);box-shadow:0 -12px 35px rgba(0,0,0,.3)}
+.nav button{color:#71869a;background:transparent}
+.nav button.active{color:#dffbff;background:rgba(25,211,255,.08);box-shadow:inset 0 0 20px rgba(25,211,255,.05)}
+.nav-icon{filter:drop-shadow(0 0 6px rgba(25,211,255,.12))}
+.coach-card{background:radial-gradient(circle at 90% 10%,rgba(124,92,255,.28),transparent 32%),linear-gradient(145deg,#091b2c,#0a0e20);border-color:rgba(124,92,255,.3)}
+.coach-card .sub{color:#a6b8ca}
+.live-step-panel,.notice,.success,.empty,.result-card,.message{background:rgba(9,18,32,.78)!important;border-color:rgba(25,211,255,.15)!important;color:#edf8ff}
+.message.bot{box-shadow:0 0 20px rgba(25,211,255,.05)}
+.scan-action{background:rgba(16,31,49,.82);color:#dff8ff;border:1px solid rgba(25,211,255,.14)}
+.mealhead,.foodrow,.event{border-color:rgba(126,183,214,.12)}
+.mealicon,.event-dot{background:rgba(25,211,255,.08);color:#6fe7ff}
+.kpi{background:rgba(12,23,39,.78)!important;border-color:rgba(25,211,255,.14)!important}
+.toast{background:#081525!important;color:#eafaff!important;border:1px solid rgba(25,211,255,.22);box-shadow:0 0 24px rgba(25,211,255,.12)}
+@media(max-width:600px){
+  body{padding-bottom:104px}
+  .topbar{padding:14px 18px}
+  .greeting{font-size:28px}
+  .card{margin:12px 14px;padding:18px}
+  .nav{padding-bottom:env(safe-area-inset-bottom)}
+}

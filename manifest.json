@@ -1,10 +1,1 @@
-{
-  "name":"FitPlan Pro — Neon Health OS V8",
-  "short_name":"FitPlan Pro V8",
-  "start_url":"./",
-  "display":"standalone",
-  "background_color":"#040711",
-  "theme_color":"#071225",
-  "lang":"tr",
-  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
-}
+{"name":"FitPlan Pro — Health OS V10","short_name":"FitPlan Pro V10 Health OS","start_url":"./","display":"standalone","background_color":"#030711","theme_color":"#06101d","lang":"tr","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]}

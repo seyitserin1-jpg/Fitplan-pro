@@ -336,3 +336,221 @@ body{
     line-height:1.45;
   }
 }
+
+/* V5.3 live pedometer */
+.live-step-panel{margin-top:14px;padding:14px;border-radius:18px;background:linear-gradient(135deg,#eef7f1,#f8fbf8);border:1px solid #dcebe1}
+.live-step-number{display:flex;align-items:baseline;gap:8px;margin:5px 0 10px}
+.live-step-number b{font-size:38px;line-height:1;font-weight:900}
+.live-step-number span{font-size:14px;color:var(--muted);font-weight:700}
+.live-step-status{display:block;margin-top:8px}
+
+
+/* =========================================================
+   FITPLAN PRO V6 — FUTURE UI
+   Neon cyan / electric indigo / midnight glass
+   ========================================================= */
+:root{
+  --bg:#050b14;
+  --surface:rgba(12,22,37,.82);
+  --surface-2:rgba(18,32,52,.72);
+  --ink:#edf7ff;
+  --muted:#8da0b5;
+  --brand:#07111f;
+  --brand-2:#101f3b;
+  --accent:#19e6c1;
+  --accent-2:#4f7cff;
+  --accent-3:#a66cff;
+  --line:rgba(132,166,207,.16);
+  --danger:#ff667d;
+  --shadow:0 18px 55px rgba(0,0,0,.28);
+  --radius:26px;
+}
+html{
+  background:#050b14;
+}
+body{
+  background:
+    radial-gradient(circle at 12% 0%, rgba(79,124,255,.17), transparent 30%),
+    radial-gradient(circle at 90% 8%, rgba(25,230,193,.12), transparent 28%),
+    linear-gradient(180deg,#050b14 0%,#07111f 45%,#050b14 100%);
+  color:var(--ink);
+}
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.25;
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:28px 28px;
+  mask-image:linear-gradient(to bottom,black,transparent 75%);
+}
+.topbar{
+  background:rgba(5,11,20,.82);
+  border-bottom:1px solid rgba(111,153,204,.16);
+  backdrop-filter:blur(20px) saturate(150%);
+  -webkit-backdrop-filter:blur(20px) saturate(150%);
+  box-shadow:0 8px 30px rgba(0,0,0,.22);
+}
+.brand-mark{
+  background:linear-gradient(135deg,#dffef7,#b9c8ff);
+  color:#07111f;
+  box-shadow:0 0 26px rgba(25,230,193,.2);
+}
+.eyebrow,.kicker{
+  color:#7f93aa;
+  letter-spacing:2.6px;
+}
+.brand-title{color:#f4fbff}
+.profile-mini{
+  background:linear-gradient(145deg,rgba(25,230,193,.12),rgba(79,124,255,.12));
+  border-color:rgba(112,180,255,.3);
+  box-shadow:inset 0 0 18px rgba(25,230,193,.06);
+}
+.card{
+  background:linear-gradient(145deg,rgba(15,28,46,.9),rgba(8,18,31,.86));
+  border:1px solid rgba(126,164,211,.16);
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.035);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+}
+.hero{
+  background:
+    radial-gradient(circle at 90% 10%,rgba(25,230,193,.14),transparent 28%),
+    radial-gradient(circle at 10% 0%,rgba(79,124,255,.16),transparent 35%),
+    linear-gradient(145deg,#0d2035,#091321);
+  border-color:rgba(79,124,255,.22);
+}
+.greeting,.title,.foodname,.stat-main,.meal-title,.event-name{
+  color:#f0f7ff;
+}
+.sub,.tag,.metric-label,.metric-target,.meal-meta,.stat-sub,.small{
+  color:#8fa3b8;
+}
+.calorie-number,.calorie-number *,.metric-value,.target-number,.stat-number{
+  color:#f2fbff;
+}
+.ring{
+  background:conic-gradient(var(--accent),var(--accent-2),var(--accent-3),var(--accent));
+  box-shadow:0 0 35px rgba(25,230,193,.14);
+}
+.ring:after{
+  background:#091524;
+}
+.metric{
+  background:linear-gradient(145deg,rgba(20,37,59,.72),rgba(9,19,33,.72));
+  border-color:rgba(126,164,211,.16);
+}
+.bar{
+  background:rgba(133,163,195,.13);
+}
+.fill{
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  box-shadow:0 0 14px rgba(25,230,193,.28);
+}
+.btn{
+  background:linear-gradient(135deg,#19e6c1,#4f7cff);
+  color:#031018;
+  border:0;
+  box-shadow:0 8px 22px rgba(25,230,193,.16);
+  transition:transform .18s ease,filter .18s ease,box-shadow .18s ease;
+}
+.btn:hover{filter:brightness(1.08);box-shadow:0 10px 28px rgba(79,124,255,.22)}
+.btn:active{transform:scale(.98)}
+.btn.light{
+  background:linear-gradient(145deg,rgba(25,230,193,.10),rgba(79,124,255,.10));
+  color:#dff8ff;
+  border:1px solid rgba(91,153,214,.2);
+  box-shadow:none;
+}
+.btn.ghost{
+  background:transparent;
+  color:#8eeede;
+  border:1px solid rgba(25,230,193,.22);
+  box-shadow:none;
+}
+.input,select{
+  background:rgba(6,14,25,.72);
+  color:#edf7ff;
+  border:1px solid rgba(118,157,204,.2);
+  box-shadow:inset 0 1px 10px rgba(0,0,0,.14);
+}
+.input::placeholder{color:#5f7288}
+.scan-action{
+  background:linear-gradient(145deg,rgba(19,35,57,.9),rgba(8,18,31,.9));
+  border-color:rgba(79,124,255,.18);
+  color:#edf7ff;
+}
+.scan-action:hover{
+  border-color:rgba(25,230,193,.45);
+  box-shadow:0 0 25px rgba(25,230,193,.08);
+}
+.scan-icon,.insight-icon,.coach-badge{
+  color:#19e6c1;
+}
+.chart{
+  background:linear-gradient(180deg,rgba(79,124,255,.04),transparent);
+}
+.chart-bar{
+  background:linear-gradient(180deg,#19e6c1,#4f7cff);
+  box-shadow:0 0 18px rgba(25,230,193,.2);
+}
+.target-card,.coach-card{
+  background:
+    radial-gradient(circle at 90% 0%,rgba(166,108,255,.2),transparent 30%),
+    linear-gradient(145deg,#0c1d31,#07111f);
+  border-color:rgba(166,108,255,.22);
+}
+.coach-card .sub,.coach-card p{color:#9eb0c4}
+.meal-card,.live-step-panel,.insight{
+  background:rgba(13,26,43,.65);
+  border-color:rgba(115,155,205,.13);
+}
+.nav{
+  background:rgba(5,11,20,.9);
+  border-top:1px solid rgba(111,153,204,.18);
+  box-shadow:0 -12px 35px rgba(0,0,0,.3);
+  backdrop-filter:blur(22px) saturate(160%);
+  -webkit-backdrop-filter:blur(22px) saturate(160%);
+}
+.nav button{
+  color:#71869b;
+}
+.nav button.active{
+  color:#eafffb;
+}
+.nav button.active:before{
+  background:linear-gradient(135deg,rgba(25,230,193,.16),rgba(79,124,255,.16));
+  border-color:rgba(25,230,193,.22);
+}
+.nav-icon{color:inherit}
+.divider{background:rgba(126,164,211,.12)}
+.progress-meta b{color:#dcecff}
+.event{
+  border-color:rgba(126,164,211,.11);
+}
+.event-dot{
+  background:rgba(25,230,193,.12);
+  color:#6ff5da;
+}
+.tag{
+  background:rgba(118,157,204,.08);
+  border-color:rgba(118,157,204,.12);
+}
+.success{
+  background:rgba(25,230,193,.1);
+  color:#9ff8e6;
+  border-color:rgba(25,230,193,.22);
+}
+.notice{
+  background:rgba(79,124,255,.09);
+  color:#b9ccff;
+  border-color:rgba(79,124,255,.22);
+}
+@media(max-width:600px){
+  .card{border-radius:24px}
+  .greeting{font-size:28px}
+  .topbar{padding-top:12px}
+}

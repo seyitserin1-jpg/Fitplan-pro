@@ -1,9 +1,51 @@
 const app=document.getElementById('app');
-const KEY='fitplan_v5';
+const KEY='fitplan_v6';
+const LEGACY_KEY='fitplan_v5';
 const defaults={name:'',sex:'male',age:30,height:175,weight:92,target:78,activity:1.4,water:0,steps:0,sleep:0,calories:0,protein:0,mealsDone:[],weights:[],foods:[]};
-let S=Object.assign({},defaults,JSON.parse(localStorage.getItem(KEY)||'{}'));
+const storedV6=JSON.parse(localStorage.getItem(KEY)||'null');
+const storedLegacy=JSON.parse(localStorage.getItem(LEGACY_KEY)||'null');
+let S=Object.assign({},defaults,storedV6||storedLegacy||{});
+if(!storedV6 && storedLegacy) localStorage.setItem(KEY,JSON.stringify(S));
 const cfg=window.FITPLAN_CONFIG||{};
 const save=()=>localStorage.setItem(KEY,JSON.stringify(S));
+
+// V5.3 live pedometer: uses the phone motion sensor while the page is open.
+const stepTracker={running:false,listener:null,lastPeak:0,baseline:9.81,peak:false,threshold:1.35};
+function updateStepUI(){
+ const el=document.getElementById('liveSteps'); if(el) el.textContent=fmt(S.steps);
+ const bar=document.getElementById('liveStepBar'); if(bar) bar.style.width=pct(S.steps,8000)+'%';
+ const status=document.getElementById('stepStatus'); if(status) status.textContent=stepTracker.running?'Canlı sayım açık • telefonu yanında taşı':'Canlı sayım kapalı';
+ const btn=document.getElementById('stepLiveBtn'); if(btn){btn.textContent=stepTracker.running?'⏹ Sayacı durdur':'🚶 Canlı adım sayar';btn.classList.toggle('light',stepTracker.running)}
+}
+function handleMotion(e){
+ const a=e.accelerationIncludingGravity; if(!a) return;
+ const x=a.x||0,y=a.y||0,z=a.z||0;
+ const mag=Math.sqrt(x*x+y*y+z*z);
+ stepTracker.baseline=stepTracker.baseline*0.92+mag*0.08;
+ const dynamic=mag-stepTracker.baseline, now=performance.now();
+ if(dynamic>stepTracker.threshold && !stepTracker.peak && now-stepTracker.lastPeak>330){
+   stepTracker.peak=true; stepTracker.lastPeak=now; S.steps+=1; save(); updateStepUI();
+   if(S.steps%100===0) toast(`${fmt(S.steps)} adım oldu 🎉`);
+ }
+ if(dynamic<0.35) stepTracker.peak=false;
+}
+async function startLiveSteps(){
+ if(stepTracker.running){stopLiveSteps();return}
+ try{
+   if(!('DeviceMotionEvent' in window)){toast('Bu tarayıcı canlı adım saymayı desteklemiyor.');return}
+   if(typeof DeviceMotionEvent.requestPermission==='function'){
+     const permission=await DeviceMotionEvent.requestPermission();
+     if(permission!=='granted'){toast('Hareket sensörü izni verilmedi.');return}
+   }
+   stepTracker.lastPeak=0;stepTracker.peak=false;stepTracker.running=true;stepTracker.listener=handleMotion;
+   window.addEventListener('devicemotion',stepTracker.listener,{passive:true}); updateStepUI(); toast('Canlı adım sayar başladı 🚶');
+ }catch(err){stepTracker.running=false;toast('Hareket sensörüne erişilemedi.');updateStepUI()}
+}
+function stopLiveSteps(){
+ if(stepTracker.listener) window.removeEventListener('devicemotion',stepTracker.listener);
+ stepTracker.listener=null;stepTracker.running=false;updateStepUI();toast('Canlı adım sayar durduruldu');
+}
+window.addEventListener('pagehide',()=>{if(stepTracker.running)stopLiveSteps()});
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
 const fmt=n=>Number(n||0).toLocaleString('tr-TR');
 const pct=(a,b)=>Math.min(100,Math.max(0,b?100*a/b:0));
@@ -61,6 +103,14 @@ function home(){
    <div class="quick-actions">
      <button class="btn" onclick="addWater()">💧 +1 bardak</button>
      <button class="btn light" onclick="addSteps()">👟 +500 adım</button>
+   </div>
+   <div class="live-step-panel">
+     <div class="kicker">CANLI TAKİP</div>
+     <div class="live-step-number"><b id="liveSteps">${fmt(S.steps)}</b><span>/ 8.000 adım</span></div>
+     <div class="bar"><div id="liveStepBar" class="fill" style="width:${pct(S.steps,8000)}%"></div></div>
+     <div id="stepStatus" class="tag live-step-status">Canlı sayım kapalı</div>
+     <button id="stepLiveBtn" class="btn full" style="margin-top:9px" onclick="startLiveSteps()">🚶 Canlı adım sayar</button>
+     <div class="small sub" style="margin-top:8px">Telefonun hareket sensörünü kullanır. Uygulama açıkken ve telefon yanında olduğunda adımları yaklaşık olarak canlı sayar.</div>
    </div>
    <div class="quick-actions" style="margin-top:9px">
      <button class="btn light" onclick="nav('scan')">📷 Yemek ekle</button>

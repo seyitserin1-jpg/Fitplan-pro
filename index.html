@@ -10,20 +10,32 @@
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="stylesheet" href="style.css">
-<title>FitPlan Pro Unique v4</title>
+<title>FitPlan Pro</title>
 </head>
 <body>
 <header class="topbar">
-  <div><div class="eyebrow">FITPLAN PRO</div><h1>Unique v4</h1></div>
-  <button class="iconbtn" id="installBtn" hidden>＋</button>
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-mark">FP</div>
+      <div>
+        <div class="eyebrow">FITPLAN PRO</div>
+        <div class="brand-title">Günlük sağlık panelin</div>
+      </div>
+    </div>
+    <button class="profile-mini" id="profileMini" aria-label="Profil" onclick="nav('profile')">
+      <span id="profileInitial">S</span>
+    </button>
+  </div>
 </header>
+
 <main id="app"></main>
+
 <nav class="nav" aria-label="Ana menü">
- <button data-page="home">🏠<span>Bugün</span></button>
- <button data-page="plan">🥗<span>Plan</span></button>
- <button data-page="scan">📷<span>Analiz</span></button>
- <button data-page="coach">🤖<span>AI Koç</span></button>
- <button data-page="profile">👤<span>Profil</span></button>
+  <button data-page="home"><span class="nav-icon">⌂</span><span>Bugün</span></button>
+  <button data-page="plan"><span class="nav-icon">◉</span><span>Plan</span></button>
+  <button data-page="scan"><span class="nav-icon">⌁</span><span>Analiz</span></button>
+  <button data-page="coach"><span class="nav-icon">✦</span><span>AI Koç</span></button>
+  <button data-page="profile"><span class="nav-icon">○</span><span>Profil</span></button>
 </nav>
 <div id="toast" class="toast"></div>
 <script src="config.js"></script>

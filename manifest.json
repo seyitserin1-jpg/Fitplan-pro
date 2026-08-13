@@ -1,9 +1,9 @@
 {
-  "name":"FitPlan Pro Unique v4",
-  "short_name":"FitPlan Pro",
+  "name":"FitPlan Pro Premium",
+  "short_name":"FitPlan Pro Premium",
   "start_url":"./",
   "display":"standalone",
-  "background_color":"#f4f8f5",
+  "background_color":"#f5f7f4",
   "theme_color":"#102a1c",
   "lang":"tr",
   "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]

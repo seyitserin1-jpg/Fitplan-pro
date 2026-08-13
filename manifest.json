@@ -1,17 +1,10 @@
 {
-  "name": "FitPlan Pro Premium",
-  "short_name": "FitPlan Pro Premium",
-  "start_url": "./",
-  "display": "standalone",
-  "background_color": "#050b14",
-  "theme_color": "#07111f",
-  "lang": "tr",
-  "icons": [
-    {
-      "src": "icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-  ]
+  "name":"FitPlan Pro — Neon Health OS V8",
+  "short_name":"FitPlan Pro V8",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#040711",
+  "theme_color":"#071225",
+  "lang":"tr",
+  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
 }

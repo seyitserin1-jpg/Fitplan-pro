@@ -1,6 +1,6 @@
 const app=document.getElementById('app');
-const KEY='fitplan_v6';
-const LEGACY_KEY='fitplan_v5';
+const KEY='fitplan_v8';
+const LEGACY_KEY='fitplan_v7';
 const defaults={name:'',sex:'male',age:30,height:175,weight:92,target:78,activity:1.4,water:0,steps:0,sleep:0,calories:0,protein:0,mealsDone:[],weights:[],foods:[]};
 const storedV6=JSON.parse(localStorage.getItem(KEY)||'null');
 const storedLegacy=JSON.parse(localStorage.getItem(LEGACY_KEY)||'null');
@@ -76,6 +76,20 @@ function home(){
  const bars=[18,34,27,51,42,66,Math.max(8,score)];
  const labels=['Pzt','Sal','Çar','Per','Cum','Cmt','Bug'];
  app.innerHTML=`<div class="wrap">
+ <section class="system-strip"><span class="live-dot"></span><b>SİSTEM AKTİF</b><span>V8.0 NEON HEALTH OS</span><span class="system-time" id="systemTime">--:--</span></section>
+ <section class="v8-command card">
+   <div class="v8-command-top">
+     <div><div class="v8-overline">FITPLAN // COMMAND CENTER</div><h2>Bugünün sağlık sinyalleri</h2><p>Hedeflerini tek ekrandan yönet. Verilerin cihazında tutulur.</p></div>
+     <div class="v8-orb"><span></span><b>${score}</b><small>SKOR</small></div>
+   </div>
+   <div class="v8-grid">
+     <div class="v8-chip"><span>👟</span><div><small>ADIM</small><strong>${fmt(S.steps)}</strong><em>${Math.round(stepPct)}% hedef</em></div></div>
+     <div class="v8-chip"><span>💧</span><div><small>HİDRASYON</small><strong>${S.water}/8</strong><em>${Math.round(waterPct)}% hedef</em></div></div>
+     <div class="v8-chip"><span>💪</span><div><small>PROTEİN</small><strong>${fmt(S.protein)}g</strong><em>${Math.round(proteinPct)}% hedef</em></div></div>
+     <div class="v8-chip"><span>🔥</span><div><small>ENERJİ</small><strong>${fmt(S.calories)}</strong><em>${Math.round(calPct)}% hedef</em></div></div>
+   </div>
+   <div class="v8-scanline"><span></span><b>SENSÖRLER</b><i>HAREKET</i><i>AKTİVİTE</i><i>HEDEFLER</i><strong>READY</strong></div>
+ </section>
  <section class="card hero">
    <div class="kicker">BUGÜN · ${new Date().toLocaleDateString('tr-TR',{day:'numeric',month:'long'})}</div>
    <h2 class="greeting">${S.name?`Merhaba ${esc(S.name)} 👋`:'FitPlan Pro’ya hoş geldin 👋'}</h2>
@@ -154,7 +168,8 @@ function addSteps(){S.steps+=500;save();toast('500 adım eklendi');home()}
 
 function plan(){
  const total=mealData.reduce((s,m)=>s+m.foods.reduce((q,f)=>q+f[2],0),0);
- app.innerHTML=`<div class="wrap"><section class="card hero"><div class="kicker">PLAN</div><div class="title">Bugünün beslenme planı</div><div class="sub" style="margin-top:7px">Örnek plan ${total} kcal. Kişisel hedefin yaklaşık ${goalKcal()} kcal. Değerler tahminidir.</div></section>
+ app.innerHTML=`<div class="wrap"><section class="system-strip"><span class="live-dot"></span><b>SİSTEM AKTİF</b><span>V8.0 NEON HEALTH OS</span><span class="system-time" id="systemTime">--:--</span></section>
+ <section class="card hero"><div class="kicker">PLAN</div><div class="title">Bugünün beslenme planı</div><div class="sub" style="margin-top:7px">Örnek plan ${total} kcal. Kişisel hedefin yaklaşık ${goalKcal()} kcal. Değerler tahminidir.</div></section>
  ${mealData.map(m=>{const done=S.mealsDone.includes(m.id),mc=m.foods.reduce((a,f)=>a+f[2],0);return `<section class="card meal-card"><div class="mealhead"><div class="mealicon">${m.icon}</div><div><div class="meal-title">${m.time} · ${m.name}</div><div class="meal-meta">${mc} kcal</div></div><input class="check" type="checkbox" ${done?'checked':''} onchange="toggleMeal('${m.id}')"></div>${m.foods.map(f=>`<div class="foodrow"><div><div class="foodname">${f[0]}</div><div class="tag">${f[1]} · P ${f[3]} g · K ${f[4]} g · Y ${f[5]} g</div></div><b>${f[2]} kcal</b></div>`).join('')}</section>`}).join('')}
  <section class="card"><div class="section-head"><div><div class="kicker">ALIŞVERİŞ</div><div class="title">Temel liste</div></div></div>${['Yumurta','Yulaf','Yoğurt','Tavuk göğsü','Bulgur','Mercimek','Sebzeler','Meyve','Badem'].map(x=>`<span class="tag" style="display:inline-block;background:var(--surface-2);padding:8px 10px;border-radius:99px;margin:3px">${x}</span>`).join('')}</section>
  </div>`;
@@ -163,6 +178,7 @@ function toggleMeal(id){const meal=mealData.find(x=>x.id===id);const has=S.meals
 
 async function scan(){
  app.innerHTML=`<div class="wrap">
+ <section class="system-strip"><span class="live-dot"></span><b>SİSTEM AKTİF</b><span>V8.0 NEON HEALTH OS</span><span class="system-time" id="systemTime">--:--</span></section>
  <section class="card hero"><div class="kicker">ANALİZ</div><div class="title">Yemeğini hızlıca kaydet</div><div class="sub" style="margin-top:7px">Fotoğraf, ürün araması veya barkod ile besin verisini bul.</div>
   <div class="scan-grid" style="margin-top:18px"><button class="scan-action" onclick="document.getElementById('photoInput').click()"><span class="scan-icon">▣</span>Fotoğraf<small>Yemek görseli</small></button><button class="scan-action" onclick="document.getElementById('foodSearch').focus()"><span class="scan-icon">⌕</span>Gıda ara<small>Open Food Facts</small></button><button class="scan-action" onclick="document.getElementById('barcode').focus()"><span class="scan-icon">▤</span>Barkod<small>13 hane</small></button></div>
  </section>
@@ -230,3 +246,7 @@ function resetAll(){if(confirm('Tüm FitPlan verileri silinsin mi?')){localStora
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();window._deferred=e});
 if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 updateProfileMini();nav('home');
+
+// V7 HUD clock
+function updateSystemClock(){const el=document.getElementById('systemTime');if(el)el.textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});}
+setInterval(updateSystemClock,1000); setTimeout(updateSystemClock,0);

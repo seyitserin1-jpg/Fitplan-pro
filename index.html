@@ -9,36 +9,20 @@
 <meta name="apple-mobile-web-app-title" content="FitPlan Pro">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon.svg">
-<link rel="stylesheet" href="style.css?v=10.0.0">
-<title>FitPlan Pro V10 Health OS</title>
+<link rel="stylesheet" href="style.css?v=12.0.0">
+<title>FitPlan Pro V12 Aurora Light Health OS</title>
 </head>
 <body>
-<header class="topbar">
-  <div class="topbar-inner">
-    <div class="brand">
-      <div class="brand-mark">FP</div>
-      <div>
-        <div class="eyebrow">FITPLAN PRO · HEALTH OS</div>
-        <div class="brand-title">Aktivite ve sağlık merkezi</div>
-      </div>
-    </div>
-    <button class="profile-mini" id="profileMini" aria-label="Profil" onclick="nav('profile')">
-      <span id="profileInitial">S</span>
-    </button>
-  </div>
-</header>
-
+<header class="topbar"><div class="topbar-inner"><div class="brand"><div class="brand-mark">FP</div><div><div class="eyebrow">FITPLAN PRO · HEALTH OS</div><div class="brand-title">Aktivite ve sağlık merkezi</div></div></div><button class="profile-mini" id="profileMini" aria-label="Profil" onclick="nav('profile')"><span id="profileInitial">S</span></button></div></header>
 <main id="app"></main>
-
 <nav class="nav" aria-label="Ana menü">
   <button data-page="home"><span class="nav-icon">⌂</span><span>Bugün</span></button>
+  <button data-page="diet">🍽️<span>Diyet</span></button>
   <button data-page="plan"><span class="nav-icon">◉</span><span>Plan</span></button>
   <button data-page="scan"><span class="nav-icon">⌁</span><span>Analiz</span></button>
-  <button data-page="coach"><span class="nav-icon">✦</span><span>AI Koç</span></button>
   <button data-page="profile"><span class="nav-icon">○</span><span>Profil</span></button>
 </nav>
 <div id="toast" class="toast"></div>
-<script src="config.js"></script>
-<script src="app.js?v=10.0.0"></script>
+<script src="config.js"></script><script src="app.js?v=12.0.0"></script>
 </body>
 </html>

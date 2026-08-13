@@ -1,6 +1,6 @@
 const app=document.getElementById('app');
-const KEY='fitplan_v10';
-const LEGACY_KEY='fitplan_v9';
+const KEY='fitplan_v11';
+const LEGACY_KEY='fitplan_v10';
 const OLDER_KEY='fitplan_v8';
 const defaults={name:'',sex:'male',age:30,height:175,weight:92,target:78,activity:1.4,water:0,steps:0,sleep:0,calories:0,protein:0,mealsDone:[],weights:[],foods:[]};
 const storedV6=JSON.parse(localStorage.getItem(KEY)||'null');
@@ -59,7 +59,7 @@ function toast(t){const x=document.getElementById('toast');x.textContent=t;x.cla
 function updateProfileMini(){const n=(S.name||'S').trim();document.getElementById('profileInitial').textContent=n[0]?.toUpperCase()||'S'}
 function nav(page){
  document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));
- ({home,plan,scan,coach,profile}[page]||home)();
+ ({home,plan,scan,profile}[page]||home)();
  window.scrollTo({top:0,behavior:'smooth'}); updateProfileMini();
 }
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>nav(b.dataset.page));
@@ -72,74 +72,53 @@ const mealData=[
 ];
 const events=[['07:30','01','Uyanış ve su'],['08:30','02','Kahvaltı'],['10:30','03','5–10 dk hareket'],['13:00','04','Öğle yemeği'],['15:30','05','Su molası'],['16:30','06','Ara öğün'],['18:30','07','20–30 dk yürüyüş'],['19:30','08','Akşam yemeği']];
 
+let homeTab='overview';
+function setHomeTab(tab){homeTab=tab;home()}
 function home(){
  const k=goalKcal(),pg=proteinGoal(),calPct=pct(S.calories,k),waterPct=pct(S.water,8),proteinPct=pct(S.protein,pg),stepPct=pct(S.steps,8000);
  const score=Math.round((calPct+waterPct+proteinPct+stepPct)/4);
- const bars=[18,34,27,51,42,66,Math.max(8,score)];
- const labels=['Pzt','Sal','Çar','Per','Cum','Cmt','Bug'];
- app.innerHTML=`<div class="watch-shell">
+ const bars=[18,34,27,51,42,66,Math.max(8,score)], labels=['Pzt','Sal','Çar','Per','Cum','Cmt','Bug'];
+ const tabs=[['overview','Genel','⌂'],['activity','Aktivite','◌'],['nutrition','Beslenme','◉'],['water','Su','≈']];
+ let content='';
+ if(homeTab==='overview') content=`
+   <section class="os-compact-grid">
+    <div class="os-mini-card accent-cyan"><span>👟 ADIM</span><b>${fmt(S.steps)}</b><small>/ 8.000</small><div class="mini-bar"><i style="width:${stepPct}%"></i></div></div>
+    <div class="os-mini-card accent-pink"><span>🔥 ENERJİ</span><b>${fmt(S.calories)}</b><small>/ ${fmt(k)} kcal</small><div class="mini-bar"><i style="width:${calPct}%"></i></div></div>
+    <div class="os-mini-card accent-blue"><span>💪 PROTEİN</span><b>${fmt(S.protein)}g</b><small>/ ${fmt(pg)}g</small><div class="mini-bar"><i style="width:${proteinPct}%"></i></div></div>
+    <div class="os-mini-card accent-green"><span>💧 SU</span><b>${S.water}</b><small>/ 8 bardak</small><div class="mini-bar"><i style="width:${waterPct}%"></i></div></div>
+   </section>
+   <section class="os-ring-panel compact">
+    <div class="os-panel-head"><div><span>AKTİVİTE HALKALARI</span><b>Bugünkü durum</b></div><strong>${score}%</strong></div>
+    <div class="rings-layout compact-rings">
+      <div class="activity-rings small-rings"><div class="ring ring-move" style="--p:${calPct}%"><div class="ring ring-exercise" style="--p:${stepPct}%"><div class="ring ring-stand" style="--p:${waterPct}%"><div class="ring-center"><strong>${fmt(S.steps)}</strong><small>ADIM</small></div></div></div></div></div>
+      <div class="ring-legend compact-legend"><div><i class="legend-dot move"></i><span>Enerji</span><b>${Math.round(calPct)}%</b></div><div><i class="legend-dot exercise"></i><span>Hareket</span><b>${Math.round(stepPct)}%</b></div><div><i class="legend-dot stand"></i><span>Su</span><b>${Math.round(waterPct)}%</b></div></div>
+    </div>
+    <div class="watch-live-step compact-live"><div class="watch-step-left"><span class="step-symbol">⌁</span><div><b>Canlı adım sayacı</b><small id="stepStatus">${stepTracker.running?'Canlı sayım açık':'Sensör hazır'}</small></div></div><button id="stepLiveBtn" class="watch-toggle ${stepTracker.running?'on':''}" onclick="startLiveSteps()"><i></i>${stepTracker.running?'Durdur':'Başlat'}</button></div>
+   </section>`;
+ if(homeTab==='activity') content=`
+   <section class="os-ring-panel compact"><div class="os-panel-head"><div><span>AKTİVİTE</span><b>Hareket merkeziniz</b></div><strong>${fmt(S.steps)}</strong></div><div class="activity-progress"><div class="activity-number"><b>${fmt(S.steps)}</b><span>/ 8.000 adım</span></div><div class="wide-progress"><i style="width:${stepPct}%"></i></div><div class="activity-foot"><span>${Math.round(stepPct)}% tamamlandı</span><button class="tiny-action" onclick="addSteps()">+500</button></div></div><div class="sensor-row"><span>●</span><div><b>Hareket sensörü</b><small id="stepStatus">${stepTracker.running?'Canlı sayım açık':'Hazır'}</small></div><button id="stepLiveBtn" class="watch-toggle ${stepTracker.running?'on':''}" onclick="startLiveSteps()"><i></i>${stepTracker.running?'Durdur':'Başlat'}</button></div></section>
+   <section class="watch-chart-card compact-chart"><div class="watch-section-title"><div><span>HAFTALIK TREND</span><b>Adım ritmi</b></div><em>7 GÜN</em></div><div class="watch-chart">${bars.map((v,i)=>`<div class="watch-bar-col"><div class="watch-bar" style="height:${v}%"></div><small>${labels[i]}</small></div>`).join('')}</div></section>`;
+ if(homeTab==='nutrition') content=`
+   <section class="os-compact-list"><div class="os-list-head"><span>BESLENME</span><b>Bugünkü hedefler</b></div>${progress('Kalori',S.calories,k,'kcal')}${progress('Protein',S.protein,pg,'g')}<button class="wide-action" onclick="nav('scan')">📷 Yemek ekle</button></section>
+   <section class="os-compact-grid two"><div class="os-mini-card"><span>HEDEF</span><b>${fmt(k)}</b><small>kcal / gün</small></div><div class="os-mini-card"><span>PROTEİN</span><b>${fmt(pg)}g</b><small>hedef / gün</small></div></section>`;
+ if(homeTab==='water') content=`
+   <section class="os-water-card"><div><span>HİDRASYON</span><b>${S.water} / 8</b><small>bardak tamamlandı</small></div><div class="water-dots">${Array.from({length:8},(_,i)=>`<i class="${i<S.water?'filled':''}">💧</i>`).join('')}</div><button class="wide-action" onclick="addWater()">+ 1 bardak su</button></section>`;
+ app.innerHTML=`<div class="watch-shell v11-shell">
    <section class="watch-status"><span class="status-live"><i></i> LIVE</span><span>HEALTH OS</span><time id="systemTime">--:--</time></section>
-
-   <section class="watch-hero">
-     <div class="watch-greeting">
-       <div class="watch-overline">BUGÜN · ${new Date().toLocaleDateString('tr-TR',{day:'numeric',month:'long'}).toUpperCase()}</div>
-       <h1>${S.name?`Merhaba ${esc(S.name)} 👋`:'Aktivite özeti'}</h1>
-       <p>Gününü tek bakışta takip et.</p>
-     </div>
-     <div class="watch-score">
-       <div class="score-ring" style="--score:${score}"><b>${score}</b><span>SKOR</span></div>
-     </div>
-   </section>
-
-   <section class="watch-ring-card">
-     <div class="watch-section-title"><div><span>AKTİVİTE</span><b>Bugünün halkaları</b></div><em>13 AĞU</em></div>
-     <div class="rings-layout">
-       <div class="activity-rings" aria-label="Aktivite halkaları">
-         <div class="ring ring-move" style="--p:${Math.min(100,calPct)}%"><div class="ring ring-exercise" style="--p:${Math.min(100,stepPct)}%"><div class="ring ring-stand" style="--p:${Math.min(100,waterPct)}%"><div class="ring-center"><strong>${fmt(S.steps)}</strong><small>ADIM</small></div></div></div></div>
-       </div>
-       <div class="ring-legend">
-         <div><i class="legend-dot move"></i><span>Enerji</span><b>${Math.round(calPct)}%</b></div>
-         <div><i class="legend-dot exercise"></i><span>Hareket</span><b>${Math.round(stepPct)}%</b></div>
-         <div><i class="legend-dot stand"></i><span>Su</span><b>${Math.round(waterPct)}%</b></div>
-       </div>
-     </div>
-     <div class="watch-live-step">
-       <div class="watch-step-left"><span class="step-symbol">⌁</span><div><b>Canlı adım sayacı</b><small id="stepStatus">${stepTracker.running?'Canlı sayım açık':'Sensör hazır'}</small></div></div>
-       <button id="stepLiveBtn" class="watch-toggle ${stepTracker.running?'on':''}" onclick="startLiveSteps()"><i></i>${stepTracker.running?'Durdur':'Başlat'}</button>
-     </div>
-   </section>
-
-   <section class="watch-metrics">
-     <div class="watch-metric"><span>🔥</span><div><b>${fmt(S.calories)}</b><small>kcal</small></div><em>${fmt(k)}</em></div>
-     <div class="watch-metric"><span>💧</span><div><b>${S.water}</b><small>bardak</small></div><em>8</em></div>
-     <div class="watch-metric"><span>💪</span><div><b>${fmt(S.protein)}g</b><small>protein</small></div><em>${fmt(pg)}g</em></div>
-   </section>
-
-   <section class="watch-actions">
-     <button onclick="addWater()"><span>💧</span><b>+1 Su</b></button>
-     <button onclick="addSteps()"><span>👟</span><b>+500 Adım</b></button>
-     <button onclick="nav('scan')"><span>📷</span><b>Yemek Ekle</b></button>
-     <button onclick="nav('coach')"><span>✦</span><b>AI Koç</b></button>
-   </section>
-
-   <section class="watch-chart-card">
-     <div class="watch-section-title"><div><span>AKTİVİTE TRENDİ</span><b>Son 7 gün</b></div><em>HEDEF 8K</em></div>
-     <div class="watch-chart">${bars.map((v,i)=>`<div class="watch-bar-col"><div class="watch-bar" style="height:${v}%"></div><small>${labels[i]}</small></div>`).join('')}</div>
-   </section>
-
-   <section class="watch-insight"><div class="insight-orb">✦</div><div><span>HEALTH INSIGHT</span><b>${score>=70?'Ritmin iyi gidiyor':'Bugün küçük bir adım yeter.'}</b><p>${esc(coachSummary())}</p></div></section>
+   <section class="watch-hero compact-hero"><div class="watch-greeting"><div class="watch-overline">BUGÜN · ${new Date().toLocaleDateString('tr-TR',{day:'numeric',month:'long'}).toUpperCase()}</div><h1>${S.name?`Merhaba ${esc(S.name)} 👋`:'Bugünkü sağlık'}</h1><p>Kısa ve net. Her şey tek bakışta.</p></div><div class="watch-score"><div class="score-ring" style="--score:${score}"><b>${score}</b><span>SKOR</span></div></div></section>
+   <div class="home-tabs" role="tablist">${tabs.map(t=>`<button class="home-tab ${homeTab===t[0]?'active':''}" onclick="setHomeTab('${t[0]}')"><span>${t[2]}</span>${t[1]}</button>`).join('')}</div>
+   ${content}
  </div>`;
  startClock(); updateStepUI();
 }
 function startClock(){clearInterval(window.__v10clock);const tick=()=>{const el=document.getElementById('systemTime');if(el)el.textContent=new Date().toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'});};tick();window.__v10clock=setInterval(tick,30000)}
 function progress(name,a,b,unit){return `<div class="progress-row"><div class="progress-meta"><span>${name}</span><b>${fmt(a)} / ${fmt(b)}${unit?' '+unit:''}</b></div><div class="bar"><div class="fill" style="width:${pct(a,b)}%"></div></div></div>`}
-function coachSummary(){if(!S.name)return'Profilini tamamladığında öneriler günlük kayıtlarına göre kişiselleştirilebilir.';if(S.protein<proteinGoal()*.5)return'Protein hedefinin gerisindesin. Bir sonraki öğünde yoğurt, yumurta, tavuk, balık veya baklagil gibi bir kaynak düşünebilirsin.';if(S.water<4)return'Su takibin bugün biraz geride. Bir sonraki saat içinde bir bardak su eklemek iyi bir başlangıç.';if(S.steps<4000)return'Hareketin bugün düşük görünüyor. Uygunsa kısa ve rahat bir yürüyüş ekleyebilirsin.';return'Bugünkü temel hedeflerin iyi gidiyor. Mükemmel olmak yerine istikrarlı kalmaya odaklan.'}
 function addWater(){S.water=Math.min(8,S.water+1);save();toast('Su eklendi');home()}
 function addSteps(){S.steps+=500;save();toast('500 adım eklendi');home()}
 
 function plan(){
  const total=mealData.reduce((s,m)=>s+m.foods.reduce((q,f)=>q+f[2],0),0);
- app.innerHTML=`<div class="wrap"><section class="system-strip"><span class="live-dot"></span><b>SİSTEM AKTİF</b><span>V9.0 HEALTH OS</span><span class="system-time" id="systemTime">--:--</span></section>
+ app.innerHTML=`<div class="wrap"><section class="system-strip"><span class="live-dot"></span><b>SİSTEM AKTİF</b><span>V11 HEALTH OS</span><span class="system-time" id="systemTime">--:--</span></section>
  <section class="card hero"><div class="kicker">PLAN</div><div class="title">Bugünün beslenme planı</div><div class="sub" style="margin-top:7px">Örnek plan ${total} kcal. Kişisel hedefin yaklaşık ${goalKcal()} kcal. Değerler tahminidir.</div></section>
  ${mealData.map(m=>{const done=S.mealsDone.includes(m.id),mc=m.foods.reduce((a,f)=>a+f[2],0);return `<section class="card meal-card"><div class="mealhead"><div class="mealicon">${m.icon}</div><div><div class="meal-title">${m.time} · ${m.name}</div><div class="meal-meta">${mc} kcal</div></div><input class="check" type="checkbox" ${done?'checked':''} onchange="toggleMeal('${m.id}')"></div>${m.foods.map(f=>`<div class="foodrow"><div><div class="foodname">${f[0]}</div><div class="tag">${f[1]} · P ${f[3]} g · K ${f[4]} g · Y ${f[5]} g</div></div><b>${f[2]} kcal</b></div>`).join('')}</section>`}).join('')}
  <section class="card"><div class="section-head"><div><div class="kicker">ALIŞVERİŞ</div><div class="title">Temel liste</div></div></div>${['Yumurta','Yulaf','Yoğurt','Tavuk göğsü','Bulgur','Mercimek','Sebzeler','Meyve','Badem'].map(x=>`<span class="tag" style="display:inline-block;background:var(--surface-2);padding:8px 10px;border-radius:99px;margin:3px">${x}</span>`).join('')}</section>
@@ -149,7 +128,7 @@ function toggleMeal(id){const meal=mealData.find(x=>x.id===id);const has=S.meals
 
 async function scan(){
  app.innerHTML=`<div class="wrap">
- <section class="system-strip"><span class="live-dot"></span><b>SİSTEM AKTİF</b><span>V9.0 HEALTH OS</span><span class="system-time" id="systemTime">--:--</span></section>
+ <section class="system-strip"><span class="live-dot"></span><b>SİSTEM AKTİF</b><span>V11 HEALTH OS</span><span class="system-time" id="systemTime">--:--</span></section>
  <section class="card hero"><div class="kicker">ANALİZ</div><div class="title">Yemeğini hızlıca kaydet</div><div class="sub" style="margin-top:7px">Fotoğraf, ürün araması veya barkod ile besin verisini bul.</div>
   <div class="scan-grid" style="margin-top:18px"><button class="scan-action" onclick="document.getElementById('photoInput').click()"><span class="scan-icon">▣</span>Fotoğraf<small>Yemek görseli</small></button><button class="scan-action" onclick="document.getElementById('foodSearch').focus()"><span class="scan-icon">⌕</span>Gıda ara<small>Open Food Facts</small></button><button class="scan-action" onclick="document.getElementById('barcode').focus()"><span class="scan-icon">▤</span>Barkod<small>13 hane</small></button></div>
  </section>
@@ -167,32 +146,11 @@ function addFood(f){S.foods.push({...f,at:Date.now()});S.calories+=f.kcal;S.prot
 function previewPhoto(){const input=document.getElementById('photoInput'),prev=document.getElementById('photoPreview');if(input.files?.[0])prev.innerHTML=`<img class="photo" src="${URL.createObjectURL(input.files[0])}">`}
 function analyzePhoto(){const input=document.getElementById('photoInput'),out=document.getElementById('photoResult'),prev=document.getElementById('photoPreview');if(!input.files?.[0]){out.innerHTML='<div class="notice">Önce bir fotoğraf seç.</div>';return}const file=input.files[0];prev.innerHTML=`<img class="photo" src="${URL.createObjectURL(file)}">`;if(cfg.backendUrl&&cfg.enableRemoteImageAI){out.innerHTML='<div class="notice">Güvenli analiz sunucusuna gönderiliyor…</div>';const fd=new FormData();fd.append('image',file);fetch(cfg.backendUrl.replace(/\/$/,'')+'/api/analyze-image',{method:'POST',body:fd}).then(r=>r.json()).then(d=>out.innerHTML=`<div class="success">${esc(d.summary||'Analiz tamamlandı.')}</div>`).catch(()=>out.innerHTML='<div class="notice">Sunucuya ulaşılamadı.</div>')}else out.innerHTML='<div class="notice">Fotoğraf akışı hazır. Gerçek görsel AI için config.js içindeki backendUrl alanına güvenli bir backend bağlamalısın.</div>'}
 
-function coach(){
- app.innerHTML=`<div class="wrap">
- <section class="card coach-card">
-   <div class="coach-badge">✦</div><div class="kicker" style="color:rgba(255,255,255,.55)">FITPLAN AI · PREMIUM</div>
-   <div class="title" style="font-size:26px">Bugün neyi birlikte çözelim?</div>
-   <div class="sub">Kayıtlarına göre genel, pratik öneriler sunarım. Sağlık teşhisi yapmam.</div>
- </section>
- <section class="card">
-   <div id="messages" class="chat-wrap"><div class="message bot">${esc(coachSummary())}</div></div>
-   <div style="margin-top:12px"><input id="question" class="input" placeholder="Örn. Bugün proteinimi nasıl tamamlarım?"></div>
-   <button class="btn full" style="margin-top:10px" onclick="ask()">Gönder ↗</button>
- </section>
- <section class="card">
-   <div class="kicker">HIZLI SORULAR</div>
-   <div class="quick-grid" style="margin-top:12px">
-    <button class="btn light" onclick="quick('Bugün ne yemeliyim?')">🍽️ Bugün ne yemeliyim?</button>
-    <button class="btn light" onclick="quick('Protein hedefime nasıl ulaşırım?')">💪 Proteinimi tamamla</button>
-    <button class="btn light" onclick="quick('Akşam için öneri ver.')">🌙 Akşam önerisi</button>
-    <button class="btn light" onclick="quick('Bugünkü kalorimi nasıl dengelerim?')">🔥 Kalori dengesi</button>
-   </div>
- </section></div>`;
-}
-function quick(q){document.getElementById('question').value=q;ask()}
-async function ask(){const q=document.getElementById('question').value.trim();if(!q)return;const box=document.getElementById('messages');box.innerHTML+=`<div class="message user">${esc(q)}</div>`;if(cfg.backendUrl&&cfg.enableRemoteAI){box.innerHTML+='<div class="message bot" id="typing">Düşünüyorum…</div>';try{const r=await fetch(cfg.backendUrl.replace(/\/$/,'')+'/api/coach',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,profile:{age:S.age,sex:S.sex,height:S.height,weight:S.weight,target:S.target,activity:S.activity},today:{water:S.water,steps:S.steps,protein:S.protein,calories:S.calories}})});const d=await r.json();document.getElementById('typing').outerHTML=`<div class="message bot">${esc(d.answer||'Yanıt alınamadı.')}</div>`}catch(e){document.getElementById('typing').outerHTML=`<div class="message bot">${esc(localCoach(q))}</div>`}}else box.innerHTML+=`<div class="message bot">${esc(localCoach(q))}</div>`;document.getElementById('question').value=''}
-function localCoach(q){const x=q.toLowerCase();if(x.includes('protein'))return`Protein hedefin yaklaşık ${proteinGoal()} g. Bugün ${S.protein} g aldın; yaklaşık ${Math.max(0,proteinGoal()-S.protein)} g kaldı.`;if(x.includes('kalori'))return`Günlük tahmini enerji hedefin ${goalKcal()} kcal. Bugün ${S.calories} kcal kaydettin. Değerler tahminidir.`;if(x.includes('akşam'))return'Akşam öğününde protein ve sebzeyi öne çıkarıp toplam enerji hedefini göz önünde bulundurabilirsin.';if(x.includes('kilo'))return'Sürdürülebilir ve kademeli ilerlemeye odaklan. Düzenli öğün, yeterli protein, hareket ve uyku önemli.';return coachSummary()}
-
+function diet(){const kcal=goalKcal(),pg=proteinGoal();const meals=[["07:30","Kahvaltı","Yulaf + yoğurt + meyve","≈ 420 kcal · 25 g protein"],["12:30","Öğle","Izgara tavuk + bulgur + salata","≈ 560 kcal · 45 g protein"],["16:00","Ara öğün","Yoğurt + bir avuç kuruyemiş","≈ 250 kcal · 12 g protein"],["19:30","Akşam","Sebzeli protein tabağı","≈ 520 kcal · 40 g protein"]];app.innerHTML=`<div class="wrap"><section class="card diet-hero"><div class="kicker">DİYET ASİSTANI</div><div class="title">Bugün için sade bir plan</div><div class="sub">Hedefin: ${fmt(kcal)} kcal · ${pg} g protein. Bu genel bir örnek plandır; kişisel tıbbi beslenme önerisi değildir.</div></section><section class="card"><div class="section-head"><div><div class="kicker">ÖĞÜN PLANI</div><div class="title">Bugünün seçenekleri</div></div></div><div class="meal-list">${meals.map(m=>`<div class="meal-row"><div class="meal-time">${m[0]}</div><div class="meal-copy"><div class="meal-title">${m[1]}</div><div class="meal-name">${m[2]}</div><div class="tag">${m[3]}</div></div><button class="meal-check" onclick="toast('Öğün işaretlendi ✓')">✓</button></div>`).join('')}</div></section><section class="card"><div class="section-head"><div><div class="kicker">HATIRLATICILAR</div><div class="title">Telefonuna bildirim gönder</div></div></div>${[['rWater','💧 Su','Düzenli su içme'],['rMeals','🍽️ Öğün','Kahvaltı / öğle / akşam'],['rSteps','👟 Hareket','Adım hedefini kontrol et'],['rNight','🌙 Gün sonu','Bugünü kapat']].map(x=>`<div class="reminder-row"><div><div class="stat-main">${x[1]}</div><div class="stat-sub">${x[2]}</div></div><label class="switch"><input id="${x[0]}" type="checkbox" onchange="saveReminders()"><span></span></label></div>`).join('')}<button class="btn full" style="margin-top:12px" onclick="enableNotifications()">🔔 Bildirim iznini aç</button><div class="tag" style="margin-top:10px">Bildirimler cihaz ve tarayıcı izinlerine bağlıdır.</div></section></div>`;loadReminders()}
+function loadReminders(){const r=JSON.parse(localStorage.getItem('fitplan_reminders')||'{}');['rWater','rMeals','rSteps','rNight'].forEach(id=>{const e=document.getElementById(id);if(e)e.checked=!!r[id]})}
+function saveReminders(){const r={};['rWater','rMeals','rSteps','rNight'].forEach(id=>{const e=document.getElementById(id);r[id]=!!e?.checked});localStorage.setItem('fitplan_reminders',JSON.stringify(r));toast('Hatırlatıcı kaydedildi');scheduleBrowserReminders()}
+async function enableNotifications(){if(!('Notification' in window)){toast('Bildirim desteği yok');return}const p=await Notification.requestPermission();if(p==='granted'){toast('Bildirimler açıldı 🔔');scheduleBrowserReminders()}else toast('Bildirim izni verilmedi')}
+function scheduleBrowserReminders(){if(!('Notification' in window)||Notification.permission!=='granted')return;clearTimeout(window._fitReminder);const r=JSON.parse(localStorage.getItem('fitplan_reminders')||'{}');const now=new Date(),t=[];if(r.rWater)t.push([10,0,'💧 Su zamanı','Bir bardak su içmeyi unutma.']);if(r.rMeals)t.push([12,30,'🍽️ Öğün zamanı','Bugünkü öğününü kontrol et.']);if(r.rSteps)t.push([17,30,'👟 Hareket zamanı','Kısa bir yürüyüşle adım hedefini ilerlet.']);if(r.rNight)t.push([21,30,'🌙 Gün sonu','Bugünkü hedeflerini kontrol et.']);if(!t.length)return;let best=null;for(const [h,m,title,body] of t){const d=new Date(now);d.setHours(h,m,0,0);if(d<=now)d.setDate(d.getDate()+1);if(!best||d<best.d)best={d,title,body}}window._fitReminder=setTimeout(()=>{try{new Notification(best.title,{body:best.body,icon:'icon.svg'})}catch(e){}scheduleBrowserReminders()},best.d-now)}
 function profile(){
  const progress=Math.min(100,Math.max(0,100*(92-S.weight)/(92-S.target)));
  app.innerHTML=`<div class="wrap"><section class="card"><div class="profile-hero"><div class="avatar">${esc((S.name||'S')[0].toUpperCase())}</div><div><div class="kicker">PROFİL</div><div class="title">${S.name?esc(S.name):'Profilini tamamla'}</div><div class="sub">Hedeflerini ve günlük hesaplarını yönet.</div></div></div></section>
@@ -207,7 +165,7 @@ function profile(){
  <button class="btn full" style="margin-top:10px" onclick="saveProfile()">Profili kaydet</button></section>
  <section class="card"><div class="kicker">HEDEF</div><div class="title">Kilo yolculuğun</div><div class="target-number" style="margin-top:8px">${S.weight} → ${S.target} kg</div><div class="bar" style="margin-top:14px"><div class="fill" style="width:${progress}%"></div></div><div class="sub" style="margin-top:8px">${Math.max(0,S.weight-S.target).toFixed(1)} kg kaldı</div></section>
  <section class="card"><div class="kpi-grid"><div class="kpi"><span class="tag">BMR</span><b>${Math.round(bmr())}</b><span class="tag">kcal</span></div><div class="kpi"><span class="tag">TDEE</span><b>${Math.round(tdee())}</b><span class="tag">kcal</span></div><div class="kpi"><span class="tag">Kalori hedefi</span><b>${goalKcal()}</b><span class="tag">kcal</span></div><div class="kpi"><span class="tag">Protein</span><b>${proteinGoal()}</b><span class="tag">g / gün</span></div></div></section>
- <section class="card"><div class="kicker">GİZLİLİK</div><div class="title">Verilerin</div><div class="sub" style="margin-top:7px">Profil ve günlük kayıtları bu sürümde cihazındaki localStorage alanında tutulur. Uzaktan AI kullanırsan yalnızca backend'e gönderdiğin alanlar işlenir.</div></section>
+ <section class="card"><div class="kicker">GİZLİLİK</div><div class="title">Verilerin</div><div class="sub" style="margin-top:7px">Profil ve günlük kayıtları bu sürümde cihazındaki localStorage alanında tutulur. Verilerin bu sürümde cihazındaki localStorage alanında tutulur.</div></section>
  <section class="card"><button class="btn danger full" onclick="resetAll()">Tüm verileri sıfırla</button></section>
  </div>`;
  document.getElementById('sex').value=S.sex;document.getElementById('activity').value=S.activity;

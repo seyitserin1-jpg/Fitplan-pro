@@ -1,1 +1,3 @@
-FitPlan Pro V13 — Diet Assistant + Reminders
+FitPlan Pro V15 Premium
+Version: 15.0.0
+Build: 2026-08-14

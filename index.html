@@ -1,159 +1,109 @@
 <!doctype html>
 <html lang="tr">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-  <meta name="theme-color" content="#f7f9fc">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="FitPlan Pro">
-  <meta name="description" content="FitPlan Pro — kişisel sağlık ve yaşam merkezi">
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
-  <title>FitPlan Pro · Health OS</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#f7f9fc">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="FitPlan Pro">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+<title>FitPlan Pro · V16</title>
 </head>
 <body>
-<div class="app-shell">
-  <header class="topbar" id="topbar">
-    <div class="brand">
-      <div class="brand-mark">FP</div>
-      <div>
-        <div class="eyebrow">FITPLAN PRO · HEALTH OS</div>
-        <div class="brand-title">Aktivite ve sağlık merkezi</div>
+<div class="app">
+<header class="topbar">
+  <div class="brand"><div class="brand-mark">FP</div><div class="brand-copy"><div class="eyebrow">FITPLAN PRO · HEALTH OS</div><div class="brand-title">Aktivite ve sağlık merkezi</div></div></div>
+  <button class="avatar" id="topProfile">S</button>
+</header>
+
+<main class="pages" id="pages">
+<section class="page today-page" data-page="today">
+  <div class="page-scroll">
+    <div class="hero">
+      <div><div class="live"><span></span> CANLI HEALTH OS <small id="clock">--:--</small></div><div class="date" id="todayDate"></div><h1>Merhaba Seyit <span>👋</span></h1><p>Kısa ve net. Her şey tek bakışta.</p></div>
+      <div class="score-ring" id="scoreRing"><div><strong id="score">0</strong><small>SKOR</small></div></div>
+    </div>
+
+    <div class="coach-card">
+      <div class="coach-icon">✦</div><div class="coach-copy"><div class="eyebrow">FITPLAN KOÇU</div><h2 id="coachTitle">Günün ilk adımı</h2><p id="coachText">Hedeflerini tamamlamak için önce 1 bardak su iç.</p></div>
+      <button class="primary" id="coachAction">Tamamla</button>
+    </div>
+
+    <div class="section-title"><div><div class="eyebrow">OTOMATİK SAĞLIK</div><h2>Bugünkü durum</h2></div><span class="live-pill" id="healthState">Hazırlanıyor</span></div>
+    <div class="metrics">
+      <article class="metric"><div class="metric-label">👟 ADIM</div><div><b id="steps">0</b><span> / 8.000</span></div><div class="progress"><i id="stepsBar"></i></div></article>
+      <article class="metric"><div class="metric-label">🔥 AKTİF ENERJİ</div><div><b id="calories">0</b><span> / 2.674 kcal</span></div><div class="progress"><i id="calBar"></i></div></article>
+      <article class="metric"><div class="metric-label">💪 PROTEİN</div><div><b id="protein">0g</b><span> / 112g</span></div><div class="progress"><i id="proteinBar"></i></div></article>
+      <article class="metric"><div class="metric-label">💧 SU</div><div><b id="water">0</b><span> / 8 bardak</span></div><div class="progress"><i id="waterBar"></i></div></article>
+    </div>
+
+    <div class="panel health-panel">
+      <div class="panel-head"><div><div class="eyebrow">HAREKET SENSÖRÜ</div><h2>Otomatik takip</h2><p id="sensorStatus">İzin verildiğinde adımlar ekran açıkken otomatik sayılır.</p></div><button class="ghost" id="sensorBtn">Bağla</button></div>
+      <div class="health-note"><b>Gerçek sağlık verisi için iPhone HealthKit</b><span>V16 web sürümü sensör takibini kullanır. Kapalı uygulama + Apple Health senkronu için native iOS katmanı gerekir.</span></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><div><div class="eyebrow">HIZLI AKSİYON</div><h2>Şimdi</h2></div></div>
+      <div class="quick-grid">
+        <button class="quick" id="waterQuick">💧<b>Su ekle</b><small>+1 bardak</small></button>
+        <button class="quick" id="mealQuick">🥗<b>Öğün kaydet</b><small>Beslenmeye git</small></button>
+        <button class="quick" id="notifyQuick">🔔<b>Bildirimleri aç</b><small>Kurulum</small></button>
       </div>
     </div>
-    <button class="avatar" id="profileTop" aria-label="Profil">S</button>
-  </header>
-
-  <main class="scroll">
-    <section class="hero sticky-hero" id="hero">
-      <div>
-        <div class="live"><span></span> CANLI HEALTH OS <small id="clock">--:--</small></div>
-        <div class="date" id="todayDate"></div>
-        <h1>Merhaba Seyit <span>👋</span></h1>
-        <p>Kısa ve net. Her şey tek bakışta.</p>
-      </div>
-      <div class="score-ring" id="scoreRing"><div><strong id="score">0</strong><small>SKOR</small></div></div>
-    </section>
-
-    <section class="coach-card">
-      <div class="coach-icon">✦</div>
-      <div class="coach-copy">
-        <div class="eyebrow">FITPLAN KOÇU</div>
-        <h2 id="coachTitle">Günün ilk adımı</h2>
-        <p id="coachText">Hedeflerini tamamlamak için önce 1 bardak su iç.</p>
-      </div>
-      <button class="primary small" id="coachAction">Tamamla</button>
-    </section>
-
-    <section class="tabs" aria-label="Hızlı erişim">
-      <button class="tab active" data-jump="today">⌂ <span>Genel</span></button>
-      <button class="tab" data-jump="activity">◌ <span>Aktivite</span></button>
-      <button class="tab" data-jump="diet">◉ <span>Beslenme</span></button>
-      <button class="tab" data-jump="water">≈ <span>Su</span></button>
-    </section>
-
-    <section class="metrics">
-      <article class="metric">
-        <div class="metric-label">👟 ADIM</div>
-        <div><b id="steps">127</b><span> / 8.000</span></div>
-        <div class="progress"><i id="stepsBar"></i></div>
-      </article>
-      <article class="metric">
-        <div class="metric-label">🔥 ENERJİ</div>
-        <div><b id="calories">0</b><span> / 2.674 kcal</span></div>
-        <div class="progress"><i id="calBar"></i></div>
-      </article>
-      <article class="metric">
-        <div class="metric-label">💪 PROTEİN</div>
-        <div><b id="protein">0g</b><span> / 112g</span></div>
-        <div class="progress"><i id="proteinBar"></i></div>
-      </article>
-      <article class="metric">
-        <div class="metric-label">💧 SU</div>
-        <div><b id="water">0</b><span> / 8 bardak</span></div>
-        <div class="progress"><i id="waterBar"></i></div>
-      </article>
-    </section>
-
-    <section class="panel" id="activity">
-      <div class="panel-head">
-        <div><div class="eyebrow">AKTİVİTE</div><h2>Bugünkü hareket</h2></div>
-        <strong class="accent" id="activityPercent">2%</strong>
-      </div>
-      <div class="activity-grid">
-        <div class="big-ring"><div><b id="activityRing">2%</b><small>HEDEF</small></div></div>
-        <div class="legend">
-          <div><span class="dot pink"></span> Enerji <b id="energyP">0%</b></div>
-          <div><span class="dot green"></span> Hareket <b id="moveP">2%</b></div>
-          <div><span class="dot cyan"></span> Su <b id="waterP">0%</b></div>
-        </div>
-      </div>
-      <div class="sensor-row">
-        <div class="sensor-icon">⌁</div>
-        <div><b>Otomatik hareket takibi</b><small id="sensorStatus">Hazırlanıyor…</small></div>
-        <button class="ghost" id="sensorBtn">İzin ver</button>
-      </div>
-    </section>
-
-    <section class="panel" id="diet">
-      <div class="panel-head">
-        <div><div class="eyebrow">BESLENME</div><h2>Bugün ne yapmalısın?</h2></div>
-        <button class="ghost" id="dietGoalBtn">Hedef</button>
-      </div>
-      <div class="diet-hero">
-        <div><span>Günlük enerji hedefi</span><b>2.674 kcal</b></div>
-        <div class="macro"><span>Protein</span><b id="dietProtein">0 / 112g</b></div>
-      </div>
-      <div class="meal-list">
-        <button class="meal" data-meal="Kahvaltı"><span>🍳</span><div><b>Kahvaltı</b><small>Protein + dengeli karbonhidrat</small></div><em>›</em></button>
-        <button class="meal" data-meal="Öğle"><span>🥗</span><div><b>Öğle</b><small>Protein + sebze + su</small></div><em>›</em></button>
-        <button class="meal" data-meal="Akşam"><span>🍲</span><div><b>Akşam</b><small>Protein ağırlıklı, hafif</small></div><em>›</em></button>
-      </div>
-    </section>
-
-    <section class="panel" id="water">
-      <div class="panel-head">
-        <div><div class="eyebrow">SU</div><h2>Hidrasyon</h2></div>
-        <strong class="accent" id="waterText">0 / 8</strong>
-      </div>
-      <div class="water-cups" id="waterCups"></div>
-      <button class="primary full" id="addWater">+ 1 bardak içtim</button>
-    </section>
-
-    <section class="panel plan-preview" id="plan">
-      <div class="panel-head"><div><div class="eyebrow">PLAN</div><h2>Bugünün akışı</h2></div></div>
-      <div class="timeline" id="timeline"></div>
-    </section>
-
-    <section class="panel" id="profile">
-      <div class="panel-head"><div><div class="eyebrow">KONTROL MERKEZİ</div><h2>Ayarlar</h2></div></div>
-      <div class="settings-list">
-        <button class="setting" id="notifyBtn"><span>🔔</span><div><b>Bildirimler</b><small id="notifyStatus">Kapalı</small></div><em>›</em></button>
-        <button class="setting" id="reminderBtn"><span>⏰</span><div><b>Hatırlatıcılar</b><small>Su · öğün · hareket · gece</small></div><em>›</em></button>
-        <button class="setting" id="goalBtn"><span>🎯</span><div><b>Günlük hedefler</b><small>Adım · su · protein · enerji</small></div><em>›</em></button>
-        <button class="setting" id="installBtn"><span>📲</span><div><b>Uygulamaya ekle</b><small>PWA kurulumu</small></div><em>›</em></button>
-      </div>
-    </section>
-
-    <div class="bottom-space"></div>
-  </main>
-
-  <nav class="bottom-nav">
-    <button class="nav active" data-nav="today">⌂<span>Bugün</span></button>
-    <button class="nav" data-nav="diet">🥗<span>Diyet</span></button>
-    <button class="nav" data-nav="plan">☷<span>Plan</span></button>
-    <button class="nav" data-nav="profile">◯<span>Profil</span></button>
-  </nav>
-</div>
-
-<div class="modal" id="modal">
-  <div class="modal-sheet">
-    <button class="close" id="closeModal">×</button>
-    <div id="modalContent"></div>
   </div>
-</div>
+</section>
 
+<section class="page diet-page" data-page="diet">
+  <div class="page-scroll">
+    <div class="page-heading"><div class="eyebrow">PREMIUM BESLENME</div><h1>Bugün ne yiyeceksin?</h1><p>Hedefine göre sade, uygulanabilir ve yönlendirici.</p></div>
+    <div class="goal-selector"><button class="goal active" data-goal="lose">Kilo verme</button><button class="goal" data-goal="maintain">Koruma</button><button class="goal" data-goal="gain">Kas geliştirme</button></div>
+    <div class="nutrition-score"><div><span>Günlük enerji</span><b>2.674 kcal</b></div><div><span>Protein</span><b id="dietProtein">0 / 112g</b></div><div><span>Su</span><b id="dietWater">0 / 8</b></div></div>
+    <div class="coach-diet panel"><div class="eyebrow">KOÇUNUN DİREKTİFİ</div><h2 id="dietDirective">İlk hedef: su + protein.</h2><p id="dietDirectiveText">Bir sonraki öğünde protein kaynağı, sebze ve suyu birlikte düşün.</p></div>
+    <div class="meal-cards">
+      <article class="meal-card"><div class="meal-icon">🍳</div><div><span>KAHVALTI</span><h3>Güne proteinle başla</h3><p>Yumurta/yoğurt + sebze + dengeli bir karbonhidrat seçeneği.</p></div><button class="meal-done" data-meal="breakfast">Ekle</button></article>
+      <article class="meal-card"><div class="meal-icon">🥗</div><div><span>ÖĞLE</span><h3>Dengeli tabak</h3><p>Protein + bol sebze + ihtiyacına göre karbonhidrat.</p></div><button class="meal-done" data-meal="lunch">Ekle</button></article>
+      <article class="meal-card"><div class="meal-icon">🍲</div><div><span>AKŞAM</span><h3>Protein öncelikli</h3><p>Tok tutan protein, sebze ve yeterli su. Aşırı kısıtlama yok.</p></div><button class="meal-done" data-meal="dinner">Ekle</button></article>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><div><div class="eyebrow">AKILLI YÖNLENDİRME</div><h2>Bugünün planı</h2></div></div>
+      <ul class="directive-list"><li>💧 Önce su hedefini tamamla.</li><li>💪 Her ana öğünde protein kaynağı düşün.</li><li>🥬 Sebze ve lif içeren seçimleri artır.</li><li>🌙 Geceyi aşırı açlıkla değil dengeli bir öğünle bitir.</li></ul>
+    </div>
+  </div>
+</section>
+
+<section class="page plan-page" data-page="plan">
+  <div class="page-scroll">
+    <div class="page-heading"><div class="eyebrow">BUGÜNÜN AKIŞI</div><h1>Planın hazır.</h1><p>Görevler tamamlandıkça koçun sıradaki adımı öne çıkarır.</p></div>
+    <div class="timeline" id="timeline"></div>
+  </div>
+</section>
+
+<section class="page profile-page" data-page="profile">
+  <div class="page-scroll">
+    <div class="page-heading"><div class="eyebrow">KONTROL MERKEZİ</div><h1>Profil & Ayarlar</h1><p>Sağlık, beslenme ve bildirim tercihlerini buradan yönet.</p></div>
+    <div class="settings-list">
+      <button class="setting highlight" id="notificationSettings"><span>🔔</span><div><b>Bildirim merkezini aç</b><small id="notificationStatus">Önce PWA'yı Ana Ekrana ekle</small></div><em>›</em></button>
+      <button class="setting" id="reminderSettings"><span>⏰</span><div><b>Hatırlatıcılar</b><small>Su · öğün · hareket · gece</small></div><em>›</em></button>
+      <button class="setting" id="healthSettings"><span>❤️</span><div><b>Sağlık verileri</b><small>Hareket sensörü · HealthKit'e hazır mimari</small></div><em>›</em></button>
+      <button class="setting" id="goalSettings"><span>🎯</span><div><b>Hedefler</b><small>Adım · su · protein · enerji</small></div><em>›</em></button>
+      <button class="setting" id="installSettings"><span>📲</span><div><b>Uygulamaya ekle</b><small>iPhone Ana Ekranı</small></div><em>›</em></button>
+    </div>
+    <div class="privacy"><b>🔒 Sağlık verin senin.</b><span>V16 web sürümü verileri cihazında saklar. HealthKit entegrasyonu native iOS sürümünde Apple'ın izin sistemiyle çalışacaktır.</span></div>
+  </div>
+</section>
+</main>
+
+<nav class="bottom-nav">
+<button class="nav active" data-target="today">⌂<span>Bugün</span></button>
+<button class="nav" data-target="diet">🥗<span>Diyet</span></button>
+<button class="nav" data-target="plan">☷<span>Plan</span></button>
+<button class="nav" data-target="profile">◯<span>Profil</span></button>
+</nav>
+
+<div class="modal" id="modal"><div class="modal-sheet"><button class="close" id="closeModal">×</button><div id="modalContent"></div></div></div>
 <div class="toast" id="toast"></div>
 <script src="app.js"></script>
 </body>

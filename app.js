@@ -1,123 +1,66 @@
-const state = {
-  steps: Number(localStorage.getItem("fp_steps") || 127),
-  water: Number(localStorage.getItem("fp_water") || 0),
-  protein: Number(localStorage.getItem("fp_protein") || 0),
-  calories: Number(localStorage.getItem("fp_calories") || 0),
-  reminders: JSON.parse(localStorage.getItem("fp_reminders") || "null") || {water:true,meal:true,move:true,night:true},
-  notificationAsked: localStorage.getItem("fp_notificationAsked") === "1",
-  sensorActive:false
-};
-const $ = s => document.querySelector(s);
-const clamp = (n,a,b)=>Math.max(a,Math.min(b,n));
-const save = ()=>{["steps","water","protein","calories"].forEach(k=>localStorage.setItem("fp_"+k,state[k]));localStorage.setItem("fp_reminders",JSON.stringify(state.reminders));};
-
-function pct(v,max){return clamp(Math.round(v/max*100),0,100)}
+const S={steps:+localStorage.getItem("fp_steps")||127,water:+localStorage.getItem("fp_water")||0,protein:+localStorage.getItem("fp_protein")||0,calories:+localStorage.getItem("fp_calories")||0};
+const $=s=>document.querySelector(s), clamp=(n,a,b)=>Math.max(a,Math.min(b,n)), pct=(v,m)=>clamp(Math.round(v/m*100),0,100);
+const save=()=>["steps","water","protein","calories"].forEach(k=>localStorage.setItem("fp_"+k,S[k]));
+function toast(t){let x=$("#toast");x.textContent=t;x.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>x.classList.remove("show"),2500)}
 function render(){
-  $("#steps").textContent = state.steps.toLocaleString("tr-TR");
-  $("#water").textContent = state.water;
-  $("#protein").textContent = state.protein+"g";
-  $("#calories").textContent = state.calories;
-  $("#dietProtein").textContent = `${state.protein} / 112g`;
-  $("#stepsBar").style.width = pct(state.steps,8000)+"%";
-  $("#waterBar").style.width = pct(state.water,8)+"%";
-  $("#proteinBar").style.width = pct(state.protein,112)+"%";
-  $("#calBar").style.width = pct(state.calories,2674)+"%";
-  $("#waterText").textContent = `${state.water} / 8`;
-  $("#waterP").textContent = pct(state.water,8)+"%";
-  $("#moveP").textContent = pct(state.steps,8000)+"%";
-  $("#energyP").textContent = pct(state.calories,2674)+"%";
-  const score = Math.round((pct(state.steps,8000)+pct(state.water,8)+pct(state.protein,112)+pct(state.calories,2674))/4);
-  $("#score").textContent = score;
-  $("#scoreRing").style.setProperty("--score",score+"%");
-  $("#activityPercent").textContent = pct(state.steps,8000)+"%";
-  $("#activityRing").textContent = pct(state.steps,8000)+"%";
-  $(".big-ring").style.setProperty("--activity",pct(state.steps,8000)+"%");
-  renderCups(); renderCoach(); renderTimeline(); save();
+ $("#steps").textContent=S.steps.toLocaleString("tr-TR");$("#water").textContent=S.water;$("#protein").textContent=S.protein+"g";$("#calories").textContent=S.calories;
+ $("#dietProtein").textContent=`${S.protein} / 112g`;$("#dietWater").textContent=`${S.water} / 8`;
+ $("#stepsBar").style.width=pct(S.steps,8000)+"%";$("#waterBar").style.width=pct(S.water,8)+"%";$("#proteinBar").style.width=pct(S.protein,112)+"%";$("#calBar").style.width=pct(S.calories,2674)+"%";
+ const score=Math.round((pct(S.steps,8000)+pct(S.water,8)+pct(S.protein,112)+pct(S.calories,2674))/4);$("#score").textContent=score;$("#scoreRing").style.setProperty("--score",score+"%");
+ $("#healthState").textContent=S.steps>0?"Otomatik":"Hazır";coach();save();
 }
-function renderCups(){
-  const wrap=$("#waterCups"); wrap.innerHTML="";
-  for(let i=1;i<=8;i++){const b=document.createElement("button");b.className="cup "+(i<=state.water?"done":"");b.textContent=i<=state.water?"💧":"○";b.onclick=()=>{state.water=i;render()};wrap.appendChild(b)}
-}
-function renderCoach(){
-  let title="Günün ilk adımı", text="Hedeflerini tamamlamak için önce 1 bardak su iç.";
-  if(state.water<4){title="Öncelik: hidrasyon 💧";text=`Bugün ${state.water}/8 bardaktasın. Şimdi 1 bardak su iç.`}
-  else if(state.steps<3000){title="Şimdi biraz hareket 🚶";text=`${state.steps.toLocaleString("tr-TR")} adımdasın. Kısa bir yürüyüş iyi bir sonraki adım.`}
-  else if(state.protein<80){title="Protein hedefini tamamla 💪";text=`${state.protein}g aldın. Bir sonraki öğünde protein ağırlıklı seçim yap.`}
-  else {title="Çok iyi gidiyorsun ✨";text="Bugünkü hedeflerini tamamlamaya devam et."}
-  $("#coachTitle").textContent=title;$("#coachText").textContent=text;
-}
-function renderTimeline(){
- const items=[["08:00","💧","Su","1 bardak"],["09:00","🍳","Kahvaltı","Protein + dengeli karbonhidrat"],["11:30","🚶","Hareket","10–15 dk yürüyüş"],["13:00","🥗","Öğle","Protein + sebze + su"],["16:00","💧","Su","1 bardak"],["19:00","🍲","Akşam","Protein ağırlıklı, hafif"],["21:30","🌙","Gün sonu","Hedeflerini kontrol et"]];
- $("#timeline").innerHTML=items.map(x=>`<div class="time-item"><span class="time">${x[0]}</span><span class="line"></span><div><b>${x[1]} ${x[2]}</b><small>${x[3]}</small></div></div>`).join("");
-}
-function toast(t){const x=$("#toast");x.textContent=t;x.classList.add("show");clearTimeout(window._toast);window._toast=setTimeout(()=>x.classList.remove("show"),2400)}
+function coach(){let t="Günün ilk adımı",p="Önce 1 bardak su iç.";if(S.water<4){t="Öncelik: hidrasyon 💧";p=`Bugün ${S.water}/8 bardaktasın. Şimdi 1 bardak su iç.`}else if(S.steps<3000){t="Şimdi biraz hareket 🚶";p=`${S.steps.toLocaleString("tr-TR")} adımdasın. Kısa bir yürüyüş iyi bir sonraki adım.`}else if(S.protein<80){t="Protein hedefini tamamla 💪";p=`${S.protein}g aldın. Bir sonraki öğünde protein ağırlıklı seçim yap.`}else{t="Çok iyi gidiyorsun ✨";p="Temel hedeflerini tamamlamaya devam et."}$("#coachTitle").textContent=t;$("#coachText").textContent=p;$("#dietDirective").textContent=t;$("#dietDirectiveText").textContent=p}
+function clock(){let d=new Date();$("#clock").textContent=d.toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit",second:"2-digit"});$("#todayDate").textContent=d.toLocaleDateString("tr-TR",{day:"2-digit",month:"long"}).toUpperCase()}setInterval(clock,1000);clock();
+
+const pages=$("#pages"), navs=[...document.querySelectorAll(".nav")], pageNames=["today","diet","plan","profile"];
+function go(name){let i=pageNames.indexOf(name);if(i<0)return;pages.scrollTo({left:i*pages.clientWidth,behavior:"smooth"});navs.forEach(n=>n.classList.toggle("active",n.dataset.target===name))}
+navs.forEach(n=>n.onclick=()=>go(n.dataset.target));
+let lock=false;pages.addEventListener("scroll",()=>{if(lock)return;let i=Math.round(pages.scrollLeft/pages.clientWidth);navs.forEach(n=>n.classList.toggle("active",pageNames[i]===n.dataset.target))},{passive:true});
+$("#topProfile").onclick=()=>go("profile");
+
+$("#coachAction").onclick=()=>{if(S.water<8){S.water++;toast("Koç görevi tamamlandı 💧")}else{S.steps+=250;toast("+250 adım hedefe eklendi 🚶")}render()};
+$("#waterQuick").onclick=()=>{S.water=Math.min(8,S.water+1);render();toast("1 bardak su kaydedildi 💧")};
+$("#mealQuick").onclick=()=>go("diet");
+$("#notifyQuick").onclick=()=>openNotifications();
+
+document.querySelectorAll(".goal").forEach(b=>b.onclick=()=>{document.querySelectorAll(".goal").forEach(x=>x.classList.remove("active"));b.classList.add("active");let g=b.dataset.goal;$("#dietDirective").textContent=g==="lose"?"Kilo verme modu: sürdürülebilir açık.":g==="gain"?"Kas geliştirme modu: protein ve düzenli öğün öncelikli.":"Koruma modu: dengeli ve sürdürülebilir seçimler.";});
+document.querySelectorAll(".meal-done").forEach(b=>b.onclick=()=>{S.protein=Math.min(112,S.protein+28);render();toast("Öğün kaydedildi · +28g protein varsayıldı");});
+
 function openModal(html){$("#modalContent").innerHTML=html;$("#modal").classList.add("show")}
 $("#closeModal").onclick=()=>$("#modal").classList.remove("show");
 $("#modal").onclick=e=>{if(e.target.id==="modal")$("#modal").classList.remove("show")};
 
-function notify(text){
- if("Notification" in window && Notification.permission==="granted") new Notification("FitPlan Pro",{body:text,icon:"icon.svg"});
-}
-async function askNotifications(){
- if(!("Notification" in window)){toast("Bu tarayıcı bildirimleri desteklemiyor.");return}
- const p=await Notification.requestPermission();
- state.notificationAsked=true;localStorage.setItem("fp_notificationAsked","1");
- $("#notifyStatus").textContent=p==="granted"?"Açık":p==="denied"?"Engellendi":"Kapalı";
- toast(p==="granted"?"Bildirimler açıldı 🔔":"Bildirim izni verilmedi.");
- if(p==="granted")notify("FitPlan Pro hazır. Bugünün hedefleri seni bekliyor.");
-}
-$("#notifyBtn").onclick=askNotifications;
-$("#reminderBtn").onclick=()=>openModal(`<h2>🔔 Hatırlatıcılar</h2><p>İstediğin hatırlatıcıları açıp kapat. Web/PWA ortamında zamanlanmış bildirimlerin çalışması cihaz ve tarayıcı izinlerine bağlıdır.</p>
-<div class="form-row"><label>💧 Su</label><select id="rWater"><option value="on">Açık</option><option value="off">Kapalı</option></select></div>
-<div class="form-row"><label>🥗 Öğün</label><select id="rMeal"><option value="on">Açık</option><option value="off">Kapalı</option></select></div>
-<div class="form-row"><label>🚶 Hareket</label><select id="rMove"><option value="on">Açık</option><option value="off">Kapalı</option></select></div>
-<div class="form-row"><label>🌙 Gece</label><select id="rNight"><option value="on">Açık</option><option value="off">Kapalı</option></select></div>
-<button class="primary full" id="saveRem">Ayarları kaydet</button>`);
-$("#modal").addEventListener("click",e=>{
- if(e.target.id==="saveRem"){["water","meal","move","night"].forEach(k=>state.reminders[k]=$("#r"+k[0].toUpperCase()+k.slice(1)).value==="on");save();$("#modal").classList.remove("show");toast("Hatırlatıcı ayarları kaydedildi.");}
-});
-$("#goalBtn").onclick=()=>openModal(`<h2>🎯 Günlük hedefler</h2><div class="form-row"><label>Adım</label><input id="gSteps" type="number" value="8000"></div><div class="form-row"><label>Su (bardak)</label><input id="gWater" type="number" value="8"></div><div class="form-row"><label>Protein (g)</label><input id="gProtein" type="number" value="112"></div><button class="primary full" id="saveGoal">Kaydet</button>`);
-$("#installBtn").onclick=()=>toast("Safari'de Paylaş → Ana Ekrana Ekle ile kurabilirsin.");
-$("#dietGoalBtn").onclick=()=>openModal(`<h2>🥗 Beslenme hedefin</h2><p>V15 şimdilik hedefe göre yönlendirme sunuyor. Daha gelişmiş kişiselleştirme için yaş, boy, kilo ve hedef bilgilerini profilinden tanımlayabiliriz.</p><button class="primary full" onclick="document.querySelector('#modal').classList.remove('show')">Tamam</button>`);
-document.addEventListener("click",e=>{
- if(e.target.id==="saveGoal"){localStorage.setItem("fp_goal_steps",$("#gSteps").value);localStorage.setItem("fp_goal_water",$("#gWater").value);localStorage.setItem("fp_goal_protein",$("#gProtein").value);$("#modal").classList.remove("show");toast("Hedefler kaydedildi.");}
-});
-document.querySelectorAll(".meal").forEach(m=>m.onclick=()=>{const name=m.dataset.meal;openModal(`<h2>${name}</h2><p><b>FitPlan önerisi:</b> Öğününü protein, sebze ve yeterli su etrafında dengeli tut. İstersen V15'in sonraki sürümünde bu bölümü gerçek yemek veritabanı ve kişisel planlayıcıyla genişletebiliriz.</p><button class="primary full" onclick="document.querySelector('#modal').classList.remove('show')">Tamam</button>`)});
-$("#addWater").onclick=()=>{if(state.water<8){state.water++;render();toast("Su kaydedildi 💧");if(state.water===8)notify("Harika! Bugünkü su hedefin tamamlandı.");}};
-$("#coachAction").onclick=()=>{if(state.water<8){state.water++;render();toast("Koç görevi tamamlandı 💧")}else if(state.steps<8000){state.steps+=250;render();toast("Hareket hedefin için +250 adım")}else{toast("Bugünkü temel hedefler tamamlandı ✨")}};
-
-function jump(id){const el=$("#"+id);if(el)el.scrollIntoView({behavior:"smooth",block:"start"})}
-document.querySelectorAll("[data-jump]").forEach(b=>b.onclick=()=>jump(b.dataset.jump));
-document.querySelectorAll(".nav").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav").forEach(x=>x.classList.remove("active"));b.classList.add("active");jump(b.dataset.nav==="today"?"today":b.dataset.nav)});
-$("#profileTop").onclick=()=>jump("profile");
-
-let lastMag=0,lastStepTime=0;
-function motionHandler(e){
- const a=e.accelerationIncludingGravity;if(!a)return;
- const mag=Math.sqrt((a.x||0)**2+(a.y||0)**2+(a.z||0)**2);
- const delta=Math.abs(mag-lastMag);lastMag=mag;
- const now=Date.now();
- if(delta>2.0 && now-lastStepTime>420){state.steps++;lastStepTime=now;render();}
-}
-async function startSensor(){
- if(!window.DeviceMotionEvent){$("#sensorStatus").textContent="Cihaz sensörü desteklenmiyor";return}
+function isStandalone(){return window.matchMedia("(display-mode: standalone)").matches||window.navigator.standalone===true}
+async function openNotifications(){
+ if(!("Notification" in window)){openModal(`<h2>🔔 Bildirimleri aç</h2><p>Bu tarayıcı oturumunda bildirim API'si kullanılamıyor. FitPlan Pro'yu iPhone Ana Ekranı'na uygulama olarak ekle ve oradan aç.</p><button class="primary" onclick="document.querySelector('#modal').classList.remove('show')">Tamam</button>`);return}
+ if(!isStandalone()){
+  openModal(`<h2>🔔 Önce uygulamayı kur</h2><p>Android'de FitPlan Pro'yu Chrome'dan Ana Ekran'a ekle veya Android uygulamasını kur. Ardından Bildirim iznini ver.</p><button class="primary" id="notifInstallClose">Anladım</button>`);return;
+ }
  try{
-   if(typeof DeviceMotionEvent.requestPermission==="function"){
-     const p=await DeviceMotionEvent.requestPermission();
-     if(p!=="granted"){toast("Hareket izni verilmedi.");return}
-   }
-   window.addEventListener("devicemotion",motionHandler);
-   state.sensorActive=true;$("#sensorStatus").textContent="Aktif · ekran açıkken otomatik hareket takibi";$("#sensorBtn").textContent="Aktif";
-   toast("Otomatik hareket takibi başladı.");
- }catch(e){$("#sensorStatus").textContent="Sensör başlatılamadı";}
+  const p=await Notification.requestPermission();
+  $("#notificationStatus").textContent=p==="granted"?"Açık":p==="denied"?"iPhone Ayarlarından izin ver":"Beklemede";
+  if(p==="granted"){toast("Bildirim izni açıldı 🔔"); if("serviceWorker" in navigator){const reg=await navigator.serviceWorker.ready;try{await reg.showNotification("FitPlan Pro",{body:"Bildirimler hazır. Bugünün ilk hedefi seni bekliyor.",icon:"icon.svg"});}catch(e){}}}
+  else if(p==="denied")openModal(`<h2>🔔 Bildirim izni kapalı</h2><p>Android'de <b>Ayarlar → Bildirimler → FitPlan Pro</b> yolundan bildirimleri açabilirsin.</p><button class="primary" onclick="document.querySelector('#modal').classList.remove('show')">Tamam</button>`);
+ }catch(e){toast("Bildirim izni açılamadı. Uygulamayı Ana Ekran'dan açmayı dene.")}
 }
-$("#sensorBtn").onclick=startSensor;
+$("#notificationSettings").onclick=openNotifications;
+$("#installSettings").onclick=()=>openModal(`<h2>📲 FitPlan Pro'yu kur</h2><p>Chrome'da menü → <b>Ana ekrana ekle</b> seçeneğini kullan. En iyi arka plan sağlık ve bildirim deneyimi için FitPlan Pro Android uygulamasını kur.</p><button class="primary" onclick="document.querySelector('#modal').classList.remove('show')">Tamam</button>`);
+$("#healthSettings").onclick=()=>openModal(`<h2>❤️ Otomatik sağlık</h2><p>V16 web sürümü hareket sensörünü otomatik kullanabilir. Android'de gerçek arka plan sağlık senkronu için Health Connect ve native Android katmanı kullanılır. Kullanıcıdan sağlık izinleri açıkça alınır.</p><button class="primary" id="connectHealth">Hareket sensörünü bağla</button>`);
+$("#reminderSettings").onclick=()=>openModal(`<h2>⏰ Hatırlatıcılar</h2><p>Su, öğün, hareket ve gece hatırlatıcılarını seç. Gerçek uygulama kapalı push teslimi için Web Push sunucusu/VAPID backend gereklidir.</p><div class="form-row"><label>Su</label><select><option>Açık</option><option>Kapalı</option></select></div><div class="form-row"><label>Öğün</label><select><option>Açık</option><option>Kapalı</option></select></div><div class="form-row"><label>Hareket</label><select><option>Açık</option><option>Kapalı</option></select></div><button class="primary" onclick="document.querySelector('#modal').classList.remove('show');toast('Hatırlatıcı tercihleri kaydedildi')">Kaydet</button>`);
+$("#goalSettings").onclick=()=>openModal(`<h2>🎯 Günlük hedefler</h2><p>V16 hedef motoru adım, su, protein ve enerji metriklerini birlikte değerlendirir. Bir sonraki aşamada kişisel hedef hesabını boy/kilo/yaş/aktivite bilgileriyle otomatikleştirebiliriz.</p><button class="primary" onclick="document.querySelector('#modal').classList.remove('show')">Tamam</button>`);
 
-function clock(){
- const d=new Date();$("#clock").textContent=d.toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
- $("#todayDate").textContent=d.toLocaleDateString("tr-TR",{day:"2-digit",month:"long"}).toUpperCase();
+let last=0,lastStep=0;
+async function motion(){
+ if(!window.DeviceMotionEvent){toast("Hareket sensörü desteklenmiyor.");return}
+ try{if(typeof DeviceMotionEvent.requestPermission==="function"){let p=await DeviceMotionEvent.requestPermission();if(p!=="granted"){toast("Hareket izni verilmedi.");return}}
+  window.addEventListener("devicemotion",e=>{let a=e.accelerationIncludingGravity;if(!a)return;let m=Math.hypot(a.x||0,a.y||0,a.z||0),d=Math.abs(m-last);last=m;if(d>2&&Date.now()-lastStep>450){S.steps++;lastStep=Date.now();render()}});
+  $("#sensorStatus").textContent="Aktif · uygulama açıkken sensör takibi · Android uygulaması arka planda Health Connect ile senkronlar";$("#sensorBtn").textContent="Aktif";toast("Otomatik hareket takibi aktif 🚶");
+ }catch(e){toast("Hareket izni açılamadı.")}
 }
-setInterval(clock,1000);clock();render();
+$("#sensorBtn").onclick=motion;
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+if("Notification" in window)$("#notificationStatus").textContent=Notification.permission==="granted"?"Açık":Notification.permission==="denied"?"iPhone Ayarlarından izin ver":"Hazır";
+render();
 
-if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
-if("Notification" in window) $("#notifyStatus").textContent=Notification.permission==="granted"?"Açık":Notification.permission==="denied"?"Engellendi":"Kapalı";
+window.__fitplanNativeSteps=function(n){ if(Number.isFinite(n)){ S.steps=n; render(); toast("Android sağlık verisi senkronlandı ✓"); }};
+if(window.FitPlanNative){ try{ window.FitPlanNative.syncNow(); }catch(e){} }

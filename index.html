@@ -1,31 +1,47 @@
 <!doctype html>
 <html lang="tr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f8f8fb">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="light-content">
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css">
-<title>FitPlan Pro V21</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f7f7fb">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <title>FitPlan Pro — Health OS</title>
 </head>
 <body>
-<header class="topbar">
-  <div class="brand">
-    <div class="logo">FP</div>
-    <div><div class="eyebrow">FITPLAN PRO</div><div class="brand-title">Health & wellness</div></div>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">FP</div>
+        <div>
+          <div class="eyebrow">FITPLAN PRO · HEALTH OS</div>
+          <div class="brand-title">Aktivite ve sağlık merkezi</div>
+        </div>
+      </div>
+      <button class="profile-btn" id="profileBtn" aria-label="Profil">S</button>
+    </header>
+
+    <main id="app" class="content"></main>
+
+    <nav class="tabbar">
+      <button class="tab active" data-page="today"><span>⌂</span><b>Bugün</b></button>
+      <button class="tab" data-page="diet"><span>🥗</span><b>Diyet</b></button>
+      <button class="tab" data-page="activity"><span>🏃</span><b>Aktivite</b></button>
+      <button class="tab" data-page="health"><span>♥</span><b>Sağlık</b></button>
+    </nav>
   </div>
-  <button class="avatar" id="profileBtn">S</button>
-</header>
-<main id="app"></main>
-<nav class="bottom-nav">
-  <button class="nav active" data-tab="today"><span>⌂</span><b>Bugün</b></button>
-  <button class="nav" data-tab="diet"><span>🥗</span><b>Diyet</b></button>
-  <button class="nav" data-tab="activity"><span>⌁</span><b>Aktivite</b></button>
-  <button class="nav" data-tab="health"><span>♡</span><b>Sağlık</b></button>
-</nav>
-<div id="toast"></div>
-<script src="app.js"></script>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="modal-backdrop" id="modal">
+    <section class="modal">
+      <button class="close" id="closeModal">×</button>
+      <div id="modalContent"></div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>

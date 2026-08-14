@@ -1,26 +1,90 @@
 <!doctype html>
 <html lang="tr">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#f7f9fc"><meta name="mobile-web-app-capable" content="yes">
-<link rel="manifest" href="manifest.json"><link rel="stylesheet" href="style.css"><link rel="icon" href="icon.svg"><title>FitPlan Pro · V18</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f7f9fd">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+  <title>FitPlan Pro V19</title>
 </head>
 <body>
-<div class="app">
-<header class="topbar"><div class="brand"><div class="brand-mark">FP</div><div><div class="eyebrow">FITPLAN PRO · HEALTH OS</div><div class="brand-title">Premium sağlık koçu</div></div></div><button class="avatar" id="topProfile">S</button></header>
-<div class="sticky-hero"><div><div class="live"><span></span> CANLI HEALTH OS <small id="clock"></small></div><div class="date" id="todayDate"></div><h1>Merhaba Seyit 👋</h1><p id="heroSub">Bugünün sağlık kontrolü otomatik hazırlanıyor.</p></div><div class="score-ring"><strong id="score">0</strong><small>SKOR</small></div></div>
-<main class="pages" id="pages">
-<section class="page" data-page="today"><div class="page-scroll">
-<div class="coach-card"><div class="coach-icon">✦</div><div class="coach-copy"><div class="eyebrow">FITPLAN KOÇU</div><h2 id="coachTitle">Otomatik sağlık kontrolü</h2><p id="coachText">Verilerini kontrol ediyorum.</p></div><button class="primary" id="coachAction">Uygula</button></div>
-<div class="section-title"><div><div class="eyebrow">BUGÜNÜN ÖZETİ</div><h2>Tek bakışta durum</h2></div><span class="live-pill" id="healthState">Otomatik</span></div>
-<div class="metrics"><article class="metric"><div class="metric-label">👟 ADIM</div><b id="steps">0</b><span>/ 8.000</span><div class="progress"><i id="stepsBar"></i></div></article><article class="metric"><div class="metric-label">🔥 ENERJİ</div><b id="calories">0</b><span>/ 2.674 kcal</span><div class="progress"><i id="calBar"></i></div></article><article class="metric"><div class="metric-label">💪 PROTEİN</div><b id="protein">0g</b><span>/ 112g</span><div class="progress"><i id="proteinBar"></i></div></article><article class="metric"><div class="metric-label">💧 SU</div><b id="water">0</b><span>/ 8 bardak</span><div class="progress"><i id="waterBar"></i></div></article></div>
-<div class="panel"><div class="panel-head"><div><div class="eyebrow">OTOMATİK SAĞLIK</div><h2>Takip durumu</h2><p id="sensorStatus">Android uygulamasında Health Connect arka planda senkronize edilir.</p></div><button class="ghost" id="sensorBtn">Bağla</button></div><div class="health-note"><b>Android Health Connect</b><span>Gerçek kapalı-uygulama sağlık senkronu native Android sürümünde çalışır ve kullanıcı izni ister.</span></div></div>
-<div class="quick-grid"><button class="quick" id="waterQuick">💧<b>+1 bardak su</b><small>Hemen kaydet</small></button><button class="quick" id="mealQuick">🥗<b>Öğün kaydet</b><small>Premium diyet</small></button><button class="quick" id="notifyQuick">🔔<b>Bildirimleri aç</b><small>Android izinleri</small></button></div>
-</div></section>
-<section class="page" data-page="diet"><div class="page-scroll"><div class="page-heading"><div class="eyebrow">PREMIUM DİYET KOÇU</div><h1>Bugünün direktifi</h1><p>Hedefine göre sade, net ve uygulanabilir.</p></div><div class="goal-selector"><button class="goal active" data-goal="lose">Yağ kaybı</button><button class="goal" data-goal="maintain">Koruma</button><button class="goal" data-goal="gain">Kas gelişimi</button></div><div class="nutrition-score"><div><span>Enerji</span><b>2.674 kcal</b></div><div><span>Protein</span><b id="dietProtein">0 / 112g</b></div><div><span>Su</span><b id="dietWater">0 / 8</b></div></div><div class="coach-diet panel"><div class="eyebrow">KOÇUN SÖZÜ</div><h2 id="dietDirective">Önce hidrasyon.</h2><p id="dietDirectiveText">Şimdi 1 bardak su iç; sonra protein odaklı bir öğüne geç.</p></div><div class="meal-cards"><article class="meal-card"><div class="meal-icon">🍳</div><div><span>KAHVALTI</span><h3>Protein + lif</h3><p>Yumurta veya yoğurt, sebze ve dengeli karbonhidrat.</p></div><button class="meal-done" data-meal="breakfast">Ekle</button></article><article class="meal-card"><div class="meal-icon">🥗</div><div><span>ÖĞLE</span><h3>Dengeli tabak</h3><p>Protein, bol sebze ve ihtiyacına göre karbonhidrat.</p></div><button class="meal-done" data-meal="lunch">Ekle</button></article><article class="meal-card"><div class="meal-icon">🍲</div><div><span>AKŞAM</span><h3>Tokluk odaklı</h3><p>Protein + sebze + yeterli sıvı. Aşırı kısıtlama yok.</p></div><button class="meal-done" data-meal="dinner">Ekle</button></article></div><div class="panel"><div class="eyebrow">AKILLI KURALLAR</div><ul class="directive-list"><li>💧 Her ana öğünden önce su.</li><li>💪 Her ana öğünde protein kaynağı.</li><li>🥬 Gün boyunca sebze/lif.</li><li>🌙 Gece gereksiz atıştırmayı azalt.</li></ul></div></div></section>
-<section class="page" data-page="plan"><div class="page-scroll"><div class="page-heading"><div class="eyebrow">OTOMATİK GÜN PLANI</div><h1>Bugünün akışı</h1><p>Koç, tamamladıklarına göre sıradaki görevi öne çıkarır.</p></div><div id="timeline" class="timeline"></div></div></section>
-<section class="page" data-page="profile"><div class="page-scroll"><div class="page-heading"><div class="eyebrow">KONTROL MERKEZİ</div><h1>Ayarlar</h1><p>Bildirim, hatırlatıcı, sağlık ve hedefler.</p></div><div class="settings-list"><button class="setting highlight" id="notificationSettings"><span>🔔</span><div><b>Bildirimleri aç</b><small id="notificationStatus">İzin kontrol ediliyor</small></div><em>›</em></button><button class="setting" id="reminderSettings"><span>⏰</span><div><b>Hatırlatıcılar</b><small>Su · öğün · hareket · gece</small></div><em>›</em></button><button class="setting" id="healthSettings"><span>❤️</span><div><b>Sağlık bağlantısı</b><small>Health Connect · otomatik senkron</small></div><em>›</em></button><button class="setting" id="goalSettings"><span>🎯</span><div><b>Günlük hedefler</b><small>Adım · su · protein · enerji</small></div><em>›</em></button></div><div class="privacy"><b>🔒 Verilerin kontrolü sende.</b><span>Sağlık izinleri Android tarafından yönetilir. FitPlan Pro gerekli izinler olmadan sağlık verisini okuyamaz.</span></div></div></section>
-</main>
-<nav class="bottom-nav"><button class="nav active" data-target="today">⌂<span>Bugün</span></button><button class="nav" data-target="diet">🥗<span>Diyet</span></button><button class="nav" data-target="plan">☷<span>Plan</span></button><button class="nav" data-target="profile">◯<span>Profil</span></button></nav>
-<div class="modal" id="modal"><div class="modal-sheet"><button class="close" id="closeModal">×</button><div id="modalContent"></div></div></div><div class="toast" id="toast"></div><script src="app.js"></script>
-</div></body></html>
+  <header class="topbar">
+    <div class="brand"><div class="logo">FP</div><div><b>FITPLAN PRO · HEALTH OS</b><strong>Aktivite ve sağlık merkezi</strong></div></div>
+    <button class="avatar" aria-label="Profil">S</button>
+  </header>
+
+  <main class="viewport" id="viewport">
+    <section class="screen" id="today">
+      <div class="hero">
+        <div>
+          <span class="eyebrow">● CANLI HEALTH OS <span id="clock"></span></span>
+          <div class="date" id="date"></div>
+          <h1>Merhaba Seyit 👋</h1>
+          <p>Kısa ve net. Bugünün kontrolü tek bakışta.</p>
+        </div>
+        <div class="score"><span id="score">1</span><small>SKOR</small></div>
+      </div>
+      <div class="coach">
+        <div class="spark">✦</div><div><span>FITPLAN KOÇU</span><b id="coachTitle">Öncelik: hidrasyon 💧</b><p id="coachText">Bugün 0/8 bardaktasın. Şimdi 1 bardak su iç.</p></div>
+        <button onclick="addWater()">Tamamla</button>
+      </div>
+      <div class="metrics">
+        <article><span>👟 ADIM</span><strong id="steps">0</strong><em>/ 8.000</em><div class="bar"><i id="stepsBar"></i></div></article>
+        <article><span>🔥 ENERJİ</span><strong>0</strong><em>/ 2.674 kcal</em><div class="bar"><i></i></div></article>
+        <article><span>💪 PROTEİN</span><strong id="protein">0g</strong><em>/ 112g</em><div class="bar"><i id="proteinBar"></i></div></article>
+        <article><span>💧 SU</span><strong id="water">0</strong><em>/ 8 bardak</em><div class="bar"><i id="waterBar"></i></div></article>
+      </div>
+      <div class="card ringcard">
+        <div class="cardhead"><span>AKTİVİTE</span><b id="activityPct">0%</b></div>
+        <h2>Bugünkü hareket</h2>
+        <div class="ring"><div><b id="ringPct">0%</b><small>GÜNLÜK</small></div></div>
+        <div class="legend"><span>● Enerji <b>0%</b></span><span>● Hareket <b id="moveLegend">0%</b></span><span>● Su <b id="waterLegend">0%</b></span></div>
+      </div>
+    </section>
+
+    <section class="screen" id="diet">
+      <div class="sectionTitle"><span>PREMIUM BESLENME</span><h1>Diyet Koçu 🥗</h1><p>Hedefine göre günün kararlarını sadeleştir.</p></div>
+      <div class="goalGrid">
+        <button class="goal active" onclick="setGoal(this,'Yağ kaybı')">🔥<b>Yağ kaybı</b><small>Dengeli açık</small></button>
+        <button class="goal" onclick="setGoal(this,'Kas gelişimi')">💪<b>Kas gelişimi</b><small>Protein odaklı</small></button>
+        <button class="goal" onclick="setGoal(this,'Koruma')">⚖️<b>Kilo koruma</b><small>Denge modu</small></button>
+      </div>
+      <div class="card directive"><span>BUGÜNÜN DİREKTİFİ</span><h2 id="directive">Önce su, sonra protein.</h2><p id="directiveText">Bir sonraki öğünde kaliteli bir protein kaynağı seç ve yanında 1–2 bardak su iç.</p></div>
+      <div class="mealGrid">
+        <article class="meal"><span>🌅 KAHVALTI</span><b>Protein + lif</b><p>Yumurta, yoğurt, yulaf veya benzeri dengeli bir kombinasyon.</p></article>
+        <article class="meal"><span>☀️ ÖĞLE</span><b>Tabak dengesi</b><p>Protein + sebze + kontrollü karbonhidrat.</p></article>
+        <article class="meal"><span>🌙 AKŞAM</span><b>Hafif ve tok tutan</b><p>Protein ve sebzeyi öne çıkar, gereksiz atıştırmayı azalt.</p></article>
+      </div>
+      <div class="note">⚠️ Bu koç genel wellness desteğidir; tıbbi tanı veya kişiye özel tedavi/diyet reçetesi değildir.</div>
+    </section>
+
+    <section class="screen" id="plan">
+      <div class="sectionTitle"><span>KONTROL MERKEZİ</span><h1>Plan & Hatırlatıcılar</h1><p>Bildirimlerini ve günlük hedeflerini buradan yönet.</p></div>
+      <div class="card setting"><div><b>🔔 Bildirimler</b><small id="notifStatus">Henüz izin istenmedi</small></div><button onclick="enableNotifications()">Aç</button></div>
+      <div class="card setting"><div><b>💧 Su hatırlatması</b><small>Her 2 saatte bir · 08:00–22:00</small></div><label class="switch"><input type="checkbox" id="waterReminder" checked><i></i></label></div>
+      <div class="card setting"><div><b>🍽️ Öğün hatırlatmaları</b><small>08:30 · 13:00 · 19:00</small></div><label class="switch"><input type="checkbox" checked><i></i></label></div>
+      <div class="card setting"><div><b>🚶 Hareket molası</b><small>Her 60 dakikada nazik uyarı</small></div><label class="switch"><input type="checkbox" checked><i></i></label></div>
+      <div class="card setting"><div><b>📳 Ses</b><small>Bildirim sesi cihaz ayarlarından yönetilir</small></div><label class="switch"><input type="checkbox" checked><i></i></label></div>
+      <div class="card"><span>ANDROID MODU</span><h2>Health Connect hazır</h2><p>Gerçek arka plan adım/sağlık senkronu Android uygulamasındaki native katmanda çalışır. Bu GitHub sürümü web arayüzü ve izin akışını sağlar.</p></div>
+    </section>
+
+    <section class="screen" id="profile">
+      <div class="sectionTitle"><span>PROFİL</span><h1>Seyit</h1><p>Hedeflerini ve uygulama tercihlerini yönet.</p></div>
+      <div class="card profileCard"><div class="avatar big">S</div><div><b>FitPlan Pro</b><p>Premium Health OS</p></div></div>
+      <div class="card setting"><div><b>🎯 Günlük hedefler</b><small>8.000 adım · 8 bardak su · 112g protein</small></div><span>›</span></div>
+      <div class="card setting"><div><b>⚙️ Uygulama</b><small>Otomatik başlatma · bildirimler · görünüm</small></div><span>›</span></div>
+    </section>
+  </main>
+
+  <nav class="bottom">
+    <button class="active" onclick="go(0)">⌂<span>Bugün</span></button>
+    <button onclick="go(1)">🥗<span>Diyet</span></button>
+    <button onclick="go(2)">☷<span>Plan</span></button>
+    <button onclick="go(3)">◯<span>Profil</span></button>
+  </nav>
+  <script src="app.js"></script>
+</body>
+</html>

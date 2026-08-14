@@ -1,1 +1,10 @@
-{"name":"FitPlan Pro V18","short_name":"FitPlan Pro","start_url":"./","display":"standalone","background_color":"#f5f7fb","theme_color":"#f7f9fc","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}]}
+{
+  "name": "FitPlan Pro V19",
+  "short_name": "FitPlan Pro",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f7f9fd",
+  "theme_color": "#f7f9fd",
+  "lang": "tr",
+  "icons": []
+}

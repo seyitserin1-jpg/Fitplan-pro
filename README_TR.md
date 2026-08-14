@@ -1,32 +1,25 @@
-# FitPlan Pro V17 Premium — Android Edition
+# FitPlan Pro V18 · Android Premium
 
-Bu sürüm Android odaklıdır.
+V18 iki parçalıdır:
 
-## Web/PWA
-- Yatay sayfa mimarisi korunur.
-- Service Worker + Web Push altyapısı hazırdır.
-- Android Chrome'da PWA olarak kurulabilir.
-- Bildirim butonu Android izin akışına göre çalışır.
-
-## Gerçek arka plan sağlık
-GitHub Pages tek başına Android'in kapalı uygulama halinde adım/sağlık sensörü verisini güvenilir biçimde okuyamaz. Bu nedenle `android/` klasöründe native Android katmanı bulunur.
-
-Native katman:
-- Health Connect üzerinden adım verisi okur.
-- WorkManager ile periyodik senkron yapar.
-- Android bildirim kanalları oluşturur.
-- Uygulama kapalıyken de hatırlatıcıların çalışmasına uygun altyapı sağlar.
-- Web arayüzünü WebView içinde açar ve native sağlık verisini JavaScript'e aktarır.
-
-## Kurulum
-1. `web/` klasöründeki dosyaları GitHub Pages deposuna yükleyin.
-2. Android Studio ile `android/` klasörünü açın.
-3. Gradle senkronizasyonunu tamamlayın.
-4. Android cihazda Health Connect izinlerini verin.
-5. Bildirim iznini verin.
-6. Uygulama içindeki FitPlan Pro ekranından hedefleri ayarlayın.
-
-Not: Gerçek uzaktan push bildirimleri için ayrıca FCM/Web Push sunucu kimlik bilgileri gerekir. Bu proje gizli anahtarları kaynak koda gömmez.
+1. `web/` → GitHub Pages için premium yatay PWA arayüzü.
+2. `android/` → gerçek Android uygulaması; Health Connect, arka plan senkronu ve native bildirim/hatırlatıcı köprüsü.
 
 ## Önemli
-Android tarafında Health Connect, kullanıcı izni verildikten sonra cihazın adım verilerini arka planda sağlayabilir; Android 14+ cihazlarda Health Connect'in cihaz içi adım sayımı düşük güç tüketimli `TYPE_STEP_COUNTER` sensörünü kullanır. Arka plan okuma için ayrıca Health Connect arka plan okuma izni gerekir. Bu izinler kullanıcı kontrolündedir.  
+GitHub Pages tek başına uygulama kapalıyken telefonun adım sensörüne sürekli erişemez. Gerçek kapalı-uygulama sağlık takibi için Android projesini APK/AAB olarak derleyip telefona kurmak gerekir. Android'in Health Connect sistemi arka planda okuma için ayrı izin destekler ve WorkManager ile periyodik senkron önerilir.
+
+## Android V18
+- Health Connect adım okuma
+- Arka plan sağlık senkronu için WorkManager
+- Android 13+ POST_NOTIFICATIONS izin akışı
+- Su/öğün/hareket hatırlatıcıları için AlarmManager
+- Yeniden başlatmada planları tekrar kuran BootReceiver
+- Web arayüzü ile native JS bridge
+- Yatay sayfa geçişi
+- Sabit sağlık başlığı
+- Premium diyet koçu
+
+### Kurulum
+Android Studio'da `android/` klasörünü aç → Gradle senkronizasyonunu tamamla → Run ile Android telefona yükle.
+
+İlk açılışta Bildirim ve Health Connect izinlerini ver. Health Connect Android 14+ cihazlarda sistemin parçasıdır; Android 13 ve altında ayrıca Health Connect uygulaması gerekebilir.

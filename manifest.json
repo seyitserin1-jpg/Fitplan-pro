@@ -1,13 +1,1 @@
-{
-  "id": "https://seyitserin1-jpg.github.io/",
-  "name": "FitPlan Pro · Health OS",
-  "short_name": "FitPlan Pro",
-  "start_url": "./",
-  "scope": "./",
-  "display": "standalone",
-  "background_color": "#f4f7fb",
-  "theme_color": "#f7f9fc",
-  "description": "Android için premium kişisel sağlık ve beslenme merkezi",
-  "prefer_related_applications": true,
-  "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"},{"src":"apple-touch-icon.png","sizes":"180x180","type":"image/png","purpose":"any"}]
-}
+{"name":"FitPlan Pro V18","short_name":"FitPlan Pro","start_url":"./","display":"standalone","background_color":"#f5f7fb","theme_color":"#f7f9fc","icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml"}]}
